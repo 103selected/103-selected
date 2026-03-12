@@ -66,6 +66,7 @@
         <div class="tab-menu">
             <button class="tab-btn active" onclick="switchTab('shop')">SHOP 관리</button>
             <button class="tab-btn" onclick="switchTab('archive')">ARCHIVE 관리</button>
+            <button class="tab-btn" onclick="switchTab('contact')">CONTACT 관리</button>
         </div>
 
         <div id="tab-shop" class="tab-content active">
@@ -80,6 +81,8 @@
                 <div class="form-group"><label>판매 상태</label><select id="p-status"><option value="available">판매중</option><option value="coming">커밍순</option><option value="sold">품절</option></select></div>
                 <div class="form-group"><label>원래 가격</label><input type="text" id="p-price" placeholder="숫자만 입력"></div>
                 <div class="form-group"><label>할인율 (%)</label><input type="number" id="p-discount" placeholder="예: 15 (없으면 비워두세요)"></div>
+                <div class="form-group full"><label>구매 링크 (후루츠패밀리 등 URL)</label><input type="text" id="p-link" placeholder="예: https://fruitsfamily.com/..."></div>
+                
                 <div class="form-group full">
                     <label id="p-image-label">상품 사진 첨부 (1장) *수정 시 비워두면 기존 사진 유지</label>
                     <input type="file" id="p-image" class="file-input-wrapper" accept="image/*">
@@ -103,15 +106,23 @@
             <h2>발행된 아카이브 목록</h2>
             <div class="item-list" id="archive-list-container"></div>
         </div>
+
+        <div id="tab-contact" class="tab-content">
+            <div class="add-form">
+                <h2>CONTACT 정보 수정</h2>
+                <div class="form-group full"><label>이메일 주소</label><input type="text" id="c-email" placeholder="예: 103selected@gmail.com"></div>
+                <div class="form-group full"><label>인스타그램 프로필 주소 (URL)</label><input type="text" id="c-insta" placeholder="예: https://instagram.com/103selected"></div>
+                <div class="form-group full"><label>후루츠패밀리 상점 주소 (URL)</label><input type="text" id="c-fruits" placeholder="예: https://fruitsfamily.com/seller/..."></div>
+                <button id="btn-save-contact" class="submit-btn">연락처 저장 및 사이트 반영</button>
+            </div>
+        </div>
     </div>
 
     <script>
         const GITHUB_OWNER = "103selected"; 
         const GITHUB_REPO = "103-selected"; 
         let GITHUB_TOKEN = localStorage.getItem('github_token') || "";
-        let dbData = { products: [], archives: [] }; let dbSha = ""; 
-        
-        // ★ 현재 수정 중인 상품의 ID를 기억하는 변수
+        let dbData = { products: [], archives: [], contact: {} }; let dbSha = ""; 
         let editingProductId = null;
 
         document.getElementById('p-price').addEventListener('input', function(e) { let value = e.target.value.replace(/[^0-9]/g, ''); e.target.value = value ? '₩' + parseInt(value).toLocaleString('ko-KR') : ''; });
@@ -125,8 +136,14 @@
                 if(!res.ok) throw new Error("인증 실패");
                 const result = await res.json(); dbSha = result.sha; 
                 const parsed = JSON.parse(b64DecodeUnicode(result.content));
-                dbData = Array.isArray(parsed) && parsed.length === 0 ? { products: [], archives: [] } : parsed;
-                if(!dbData.products) dbData.products = []; if(!dbData.archives) dbData.archives = [];
+                dbData = Array.isArray(parsed) && parsed.length === 0 ? { products: [], archives: [], contact: {} } : parsed;
+                if(!dbData.products) dbData.products = []; if(!dbData.archives) dbData.archives = []; if(!dbData.contact) dbData.contact = {};
+                
+                // 기존 CONTACT 정보 불러와서 칸에 채워두기
+                document.getElementById('c-email').value = dbData.contact.email || "103selected@gmail.com";
+                document.getElementById('c-insta').value = dbData.contact.insta || "https://instagram.com/103selected";
+                document.getElementById('c-fruits').value = dbData.contact.fruits || "https://fruitsfamily.com/seller/u1ap/103selected";
+                
                 return true;
             } catch (e) { return false; }
         }
@@ -163,12 +180,13 @@
         if(GITHUB_TOKEN) { fetchDatabase().then(success => { if(success) { document.getElementById('login-screen').style.display = 'none'; document.getElementById('dashboard-screen').style.display = 'block'; renderLists(); } else { localStorage.removeItem('github_token'); } }); }
         document.getElementById('btn-logout').addEventListener('click', () => { localStorage.removeItem('github_token'); location.reload(); });
 
-        // ★ [상품 업로드 & 수정 로직] ★
+        // [상품 업로드 & 수정 로직]
         document.getElementById('btn-add-product').addEventListener('click', async (e) => {
             const btn = e.target;
             const brand = document.getElementById('p-brand').value.toUpperCase().trim() || 'OTHER BRANDS'; 
             const name = document.getElementById('p-name').value;
             const price = document.getElementById('p-price').value;
+            const buyLink = document.getElementById('p-link').value; // ★ 링크 값 가져오기
             const fileInput = document.getElementById('p-image');
 
             if(!name || !price) return alert("상품명과 가격을 입력해주세요.");
@@ -179,24 +197,23 @@
                 if(fileInput.files.length > 0) imageUrls.push(await uploadImage(fileInput.files[0]));
 
                 if (editingProductId) {
-                    // 수정 모드일 때
                     const targetItem = dbData.products.find(x => x.id === editingProductId);
                     targetItem.brand = brand;
                     targetItem.name = name;
                     targetItem.category = document.getElementById('p-category').value;
                     targetItem.price = price;
                     targetItem.discount = document.getElementById('p-discount').value;
+                    targetItem.buyLink = buyLink; // ★ 링크 수정 반영
                     targetItem.status = document.getElementById('p-status').value;
-                    // 새 사진을 올렸을 때만 사진 교체, 아니면 기존 사진 유지
                     if (imageUrls.length > 0) targetItem.images = imageUrls;
                     
                     await saveDatabase(); alert("상품 수정 완료!");
-                    cancelEdit('shop'); // 폼 초기화
+                    cancelEdit('shop'); 
                 } else {
-                    // 새 상품 등록 모드일 때
                     dbData.products.unshift({
                         id: Date.now().toString(), brand: brand, name: name, category: document.getElementById('p-category').value,
-                        price: price, discount: document.getElementById('p-discount').value, status: document.getElementById('p-status').value, images: imageUrls, createdAt: Date.now()
+                        price: price, discount: document.getElementById('p-discount').value, buyLink: buyLink, // ★ 새 상품 링크 추가
+                        status: document.getElementById('p-status').value, images: imageUrls, createdAt: Date.now()
                     });
                     await saveDatabase(); alert("새 상품 업로드 완료!");
                     document.querySelectorAll('#tab-shop input').forEach(el => el.value = '');
@@ -206,7 +223,22 @@
             finally { btn.disabled = false; btn.innerText = editingProductId ? "수정 내용 저장" : "상품 업로드"; }
         });
 
-        // ----------------- 아카이브 (이전과 동일) -----------------
+        // [CONTACT 저장 로직]
+        document.getElementById('btn-save-contact').addEventListener('click', async (e) => {
+            const btn = e.target;
+            btn.disabled = true; btn.innerText = "저장 중... ⏳";
+            try {
+                dbData.contact = {
+                    email: document.getElementById('c-email').value,
+                    insta: document.getElementById('c-insta').value,
+                    fruits: document.getElementById('c-fruits').value
+                };
+                await saveDatabase(); alert("CONTACT 정보가 성공적으로 변경되었습니다!");
+            } catch(err) { alert("오류 발생"); }
+            finally { btn.disabled = false; btn.innerText = "연락처 저장 및 사이트 반영"; }
+        });
+
+        // 아카이브 (이전과 동일)
         document.getElementById('btn-add-archive').addEventListener('click', async (e) => {
             const btn = e.target; const title = document.getElementById('a-title').value; const fileInput = document.getElementById('a-images');
             if(!title || fileInput.files.length === 0) return alert("필수항목 누락"); btn.disabled = true; btn.innerText = `업로드 중... ⏳`;
@@ -217,22 +249,19 @@
             } catch(err) { alert("오류 발생"); } finally { btn.disabled = false; btn.innerText = "컬렉션 업로드"; }
         });
 
-        // ★ [수정 모드로 진입하는 함수] ★
         window.editItem = (id) => {
             const item = dbData.products.find(x => x.id === id);
             if(!item) return;
-
-            editingProductId = id; // 수정 중인 ID 기억
+            editingProductId = id; 
             
-            // 폼에 기존 정보 채워넣기
             document.getElementById('p-brand').value = item.brand || '';
             document.getElementById('p-name').value = item.name || '';
             document.getElementById('p-category').value = item.category || 'OUTER';
             document.getElementById('p-status').value = item.status || 'available';
             document.getElementById('p-price').value = item.price || '';
             document.getElementById('p-discount').value = item.discount || '';
+            document.getElementById('p-link').value = item.buyLink || ''; // ★ 폼에 기존 URL 채우기
 
-            // UI 변경 (수정 모드)
             document.getElementById('shop-form-box').style.border = '2px solid #000';
             document.getElementById('shop-form-title').innerText = `✏️ 상품 정보 수정 중: ${item.name}`;
             document.getElementById('btn-add-product').innerText = "수정 내용 저장";
@@ -240,10 +269,9 @@
             document.getElementById('btn-add-product').style.color = "#000";
             document.getElementById('btn-cancel-shop-edit').style.display = "block";
             
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // 위로 부드럽게 스크롤
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
         };
 
-        // ★ [수정 취소 함수] ★
         window.cancelEdit = (type) => {
             if (type === 'shop') {
                 editingProductId = null;
@@ -263,7 +291,6 @@
                 const imgSrc = item.images && item.images.length > 0 ? item.images[0] : '';
                 let priceDisplay = item.price; if (item.discount && item.discount > 0) priceDisplay = `<span class="original-price">${item.price}</span> <span class="discount-text">(${item.discount}%)</span>`;
                 
-                // ★ 리스트 우측에 [수정] 버튼 추가 ★
                 shopContainer.innerHTML += `
                     <div class="list-item">
                         <div class="item-info-box">
@@ -271,6 +298,7 @@
                             <div class="item-text">
                                 <div class="item-name">[${item.brand}] ${item.name}</div>
                                 <div class="item-meta">가격: ${priceDisplay} | 상태: ${item.status}</div>
+                                <div class="item-meta" style="color:#2196F3;">링크: ${item.buyLink ? '등록됨' : '없음'}</div>
                             </div>
                         </div>
                         <div class="item-actions">
