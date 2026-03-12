@@ -5,15 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>103 SELECTED</title>
     <style>
-        /* --- 1. 폰트 및 배경 세팅 --- */
+        /* --- 기존 오리지널 디자인 (수정 안함) --- */
         body, html { margin: 0; padding: 0; width: 100%; height: 100vh; background-color: #ffffff; font-family: 'Helvetica', 'Apple SD Gothic Neo', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; }
 
-        /* --- 2. 초기 화면: 중앙 로고 --- */
         .logo-btn { position: absolute; display: flex; font-size: 6vw; font-weight: bold; color: #000000; cursor: pointer; z-index: 50; }
         .logo-btn:hover { opacity: 0.5; }
         .split-left, .split-right { transition: all 1s cubic-bezier(0.25, 1, 0.5, 1); }
 
-        /* --- 3. 메뉴 & 내비게이션 --- */
         .top-left-logo { position: absolute; top: 40px; left: 50px; font-size: 1.5vw; font-weight: bold; color: #000000; letter-spacing: 1px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100; cursor: pointer; }
         .top-left-logo:hover { opacity: 0.5; }
 
@@ -25,7 +23,6 @@
         .nav-item { font-size: 1vw; font-weight: bold; color: #000000; cursor: pointer; letter-spacing: 2px; transition: opacity 0.3s ease; }
         .nav-item:hover { opacity: 0.4; }
 
-        /* --- 4. 각 페이지 화면 레이아웃 --- */
         .page-content { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 20; }
         #page-shop { display: block; overflow-y: auto; scrollbar-width: none; }
         #page-shop::-webkit-scrollbar { display: none; } 
@@ -70,7 +67,6 @@
         .contact-list a { color: #000; text-decoration: none; border-bottom: 1px solid #000; padding-bottom: 2px; transition: color 0.3s, border-color 0.3s; }
         .contact-list a:hover { color: #888; border-color: #888; }
 
-        /* --- 5. 팝업(Modal) 창 --- */
         .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: all 0.5s ease; z-index: 200; }
         .modal-content { position: relative; width: 65vw; height: 75vh; display: flex; flex-direction: column; transform: translateY(20px); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
         .btn-close-modal { align-self: flex-end; font-size: 1.2vw; font-weight: bold; cursor: pointer; margin-bottom: 3vh; letter-spacing: 2px; transition: opacity 0.3s ease; }
@@ -89,7 +85,6 @@
         .disable-btn { color: #ccc; cursor: default; }
         .disable-btn:hover { opacity: 1; }
 
-        /* --- 6. 상태 변화 애니메이션 --- */
         body.menu-mode .logo-btn { pointer-events: none; }
         body.menu-mode .split-left { transform: translateX(-10vw); opacity: 0; filter: blur(8px); }
         body.menu-mode .split-right { transform: translateX(10vw); opacity: 0; filter: blur(8px); }
@@ -106,7 +101,6 @@
         body.modal-open .modal-overlay { opacity: 1; pointer-events: auto; }
         body.modal-open .modal-content { transform: translateY(0); }
 
-        /* --- 7. ★ 모바일 반응형 디자인 --- */
         @media (max-width: 768px) {
             .logo-btn { font-size: 12vw; }
             .top-left-logo { top: 20px; left: 20px; font-size: 4vw; }
@@ -177,10 +171,8 @@
     </div>
 
     <div class="page-content" id="page-contact">
-        <div class="contact-list">
-            <div>Mail: 103selected@gmail.com</div>
-            <div>INSTAGRAM: <a href="https://instagram.com/103selected" target="_blank">@103selected</a></div>
-            <div>FRUITSFAMILY: <a href="https://fruitsfamily.com/seller/u1ap/103selected" target="_blank">@103SELECTED</a></div>
+        <div class="contact-list" id="contact-container">
+            <div>Mail: 불러오는 중...</div>
         </div>
     </div>
 
@@ -199,18 +191,33 @@
         const DB_URL = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/database.json?t=${Date.now()}`;
 
         let products = []; 
+        let globalData = {};
 
         async function loadDatabase() {
             try {
                 const response = await fetch(DB_URL);
                 if (!response.ok) throw new Error("데이터를 찾을 수 없습니다.");
-                const globalData = await response.json();
+                globalData = await response.json();
                 products = globalData.products || [];
+                
+                // ★ 사이트 켜질 때 CONTACT 정보도 장부에서 불러와서 그려줍니다!
+                renderContact();
             } catch (error) {
                 console.error("데이터 로딩 실패:", error);
             }
         }
         window.onload = loadDatabase;
+
+        // ★ CONTACT 정보 렌더링 함수 ★
+        function renderContact() {
+            const contactData = globalData.contact || { email: "103selected@gmail.com", insta: "https://instagram.com/103selected", fruits: "https://fruitsfamily.com/seller/u1ap/103selected" };
+            const container = document.getElementById('contact-container');
+            container.innerHTML = `
+                <div>Mail: ${contactData.email}</div>
+                <div>INSTAGRAM: <a href="${contactData.insta}" target="_blank">@103selected</a></div>
+                <div>FRUITSFAMILY: <a href="${contactData.fruits}" target="_blank">@103SELECTED</a></div>
+            `;
+        }
 
         function formatPrice(originalStr, discountStr) {
             if (!discountStr || discountStr.trim() === "" || parseInt(discountStr) === 0) return originalStr;
@@ -243,7 +250,6 @@
 
         function showShopMain() { viewSubMenu.style.display = 'none'; viewItemList.style.display = 'none'; viewShopMain.style.display = 'flex'; }
 
-        // ★ 브랜드명 자동 추출 시스템 (하드코딩 제거!) ★
         function showSubMenu(type) {
             viewShopMain.style.display = 'none';
             viewItemList.style.display = 'none';
@@ -251,14 +257,9 @@
             subMenuContainer.innerHTML = '';
             
             if (type === 'BRANDS') {
-                // 1. 등록된 옷에서 브랜드 이름들만 쏙쏙 뽑아오기
                 let uniqueBrands = [...new Set(products.map(p => p.brand || "OTHER BRANDS"))];
-                
-                // 2. 가나다(알파벳) 순으로 정렬하되, 'OTHER BRANDS'는 무조건 맨 밑으로 보내기
                 uniqueBrands = uniqueBrands.filter(b => b !== "OTHER BRANDS").sort();
                 uniqueBrands.push("OTHER BRANDS");
-
-                // 3. 뽑아낸 브랜드들로 버튼 만들기
                 uniqueBrands.forEach(brand => {
                     subMenuContainer.innerHTML += `<div class="sub-menu-item" onclick="showItemList('BRAND', '${brand}')">${brand}</div>`;
                 });
@@ -284,7 +285,6 @@
                 if (filterType === 'ALL') match = true;
                 else if (filterType === 'CATEGORY') { if (product.category === filterValue) match = true; }
                 else if (filterType === 'BRAND') {
-                    // ★ 클릭한 브랜드와 상품의 브랜드가 일치하는지 확인
                     let itemBrand = product.brand || "OTHER BRANDS";
                     if (itemBrand === filterValue) match = true;
                 }
@@ -325,7 +325,7 @@
             const buyBtnContainer = document.getElementById('buy-btn-container');
             if (item.status === "sold") buyBtnContainer.innerHTML = `<span class="buy-btn disable-btn">Sold Out</span>`;
             else if (item.status === "coming") buyBtnContainer.innerHTML = `<span class="buy-btn disable-btn">Coming Soon</span>`;
-            else buyBtnContainer.innerHTML = `<a href="${item.buyLink || '#'}" target="_blank" class="buy-btn">Buy</a>`;
+            else buyBtnContainer.innerHTML = `<a href="${item.buyLink || '#'}" target="_blank" class="buy-btn">Buy</a>`; // ★ 입력한 URL로 바로 이동!
 
             body.classList.add('modal-open');
         }
