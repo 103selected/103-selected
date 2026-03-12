@@ -65,7 +65,7 @@
 
         <div class="tab-menu">
             <button class="tab-btn active" onclick="switchTab('shop')">SHOP 관리</button>
-            <button class="tab-btn" onclick="switchTab('archive')">ARCHIVE 관리</button>
+            <button class="tab-btn" onclick="switchTab('archive')">ARCHIVE / VIDEO 관리</button>
             <button class="tab-btn" onclick="switchTab('contact')">CONTACT 관리</button>
         </div>
 
@@ -75,16 +75,18 @@
                     <span id="shop-form-title">+ 새 상품 등록</span>
                     <button class="btn-cancel-edit" id="btn-cancel-shop-edit" onclick="cancelEdit('shop')">수정 취소</button>
                 </h2>
-                <div class="form-group"><label>브랜드명</label><input type="text" id="p-brand" placeholder="예: HELMUT LANG (기타는 OTHER BRANDS)"></div>
+                <div class="form-group"><label>브랜드명 (1개면 자동으로 OTHER BRANDS로 감)</label><input type="text" id="p-brand" placeholder="예: HELMUT LANG"></div>
                 <div class="form-group"><label>상품명</label><input type="text" id="p-name" placeholder="예: 1998 Raw Denim Jacket"></div>
                 <div class="form-group"><label>카테고리</label><select id="p-category"><option value="OUTER">OUTER</option><option value="TOP">TOP</option><option value="BOTTOM">BOTTOM</option><option value="SHOES">SHOES</option><option value="ACC">ACC</option></select></div>
                 <div class="form-group"><label>판매 상태</label><select id="p-status"><option value="available">판매중</option><option value="coming">커밍순</option><option value="sold">품절</option></select></div>
                 <div class="form-group"><label>원래 가격</label><input type="text" id="p-price" placeholder="숫자만 입력"></div>
                 <div class="form-group"><label>할인율 (%)</label><input type="number" id="p-discount" placeholder="예: 15 (없으면 비워두세요)"></div>
-                <div class="form-group full"><label>구매 링크 (후루츠패밀리 등 URL)</label><input type="text" id="p-link" placeholder="예: https://fruitsfamily.com/..."></div>
+                
+                <div class="form-group"><label style="color:#2196F3; font-weight:bold;">NEW ARRIVAL 노출 기간 (일)</label><input type="number" id="p-new-days" placeholder="예: 3 (비워두면 일반 상품)"></div>
+                <div class="form-group"><label>구매 링크 (URL)</label><input type="text" id="p-link" placeholder="예: https://fruitsfamily.com/..."></div>
                 
                 <div class="form-group full">
-                    <label id="p-image-label">상품 사진 첨부 (1장) *수정 시 비워두면 기존 사진 유지</label>
+                    <label id="p-image-label">상품 사진 첨부 (1장) *수정 시 비워두면 기존 유지</label>
                     <input type="file" id="p-image" class="file-input-wrapper" accept="image/*">
                 </div>
                 <button id="btn-add-product" class="submit-btn">상품 업로드</button>
@@ -94,16 +96,22 @@
         </div>
 
         <div id="tab-archive" class="tab-content">
-            <div class="add-form">
-                <h2>+ 룩북 / 플리마켓 발행</h2>
-                <div class="form-group"><label>구분</label><select id="a-category"><option value="LOOKBOOK">LOOKBOOK</option><option value="FLEAMARKET">FLEA MARKET</option></select></div>
+            <div class="add-form" id="archive-form-box">
+                <h2>
+                    <span id="archive-form-title">+ 아카이브 / 비디오 발행</span>
+                    <button class="btn-cancel-edit" id="btn-cancel-archive-edit" onclick="cancelEdit('archive')">수정 취소</button>
+                </h2>
+                <div class="form-group"><label>메뉴(구분) 이름 직접 입력</label><input type="text" id="a-category" placeholder="예: LOOKBOOK, VIDEO, FLEA MARKET 등"></div>
                 <div class="form-group"><label>넘버링</label><input type="text" id="a-prefix" placeholder="예: 01."></div>
                 <div class="form-group full"><label>타이틀</label><input type="text" id="a-title" placeholder="주제 입력"></div>
-                <div class="form-group full"><label>테마 설명 (비워두면 사진만)</label><textarea id="a-desc" rows="4"></textarea></div>
-                <div class="form-group full"><label>사진 여러 장 첨부</label><input type="file" id="a-images" class="file-input-wrapper" accept="image/*" multiple></div>
-                <button id="btn-add-archive" class="submit-btn">컬렉션 업로드</button>
+                
+                <div class="form-group full"><label style="color:#e52d27; font-weight:bold;">유튜브 주소 (VIDEO일 경우 필수)</label><input type="text" id="a-youtube" placeholder="예: https://www.youtube.com/watch?v=..."></div>
+                
+                <div class="form-group full"><label>테마 설명 (비워두면 사진/영상만)</label><textarea id="a-desc" rows="3"></textarea></div>
+                <div class="form-group full"><label>사진 여러 장 첨부 (비디오만 올리려면 비워두세요)</label><input type="file" id="a-images" class="file-input-wrapper" accept="image/*" multiple></div>
+                <button id="btn-add-archive" class="submit-btn">콘텐츠 업로드</button>
             </div>
-            <h2>발행된 아카이브 목록</h2>
+            <h2>발행된 아카이브/비디오 목록</h2>
             <div class="item-list" id="archive-list-container"></div>
         </div>
 
@@ -111,8 +119,8 @@
             <div class="add-form">
                 <h2>CONTACT 정보 수정</h2>
                 <div class="form-group full"><label>이메일 주소</label><input type="text" id="c-email" placeholder="예: 103selected@gmail.com"></div>
-                <div class="form-group full"><label>인스타그램 프로필 주소 (URL)</label><input type="text" id="c-insta" placeholder="예: https://instagram.com/103selected"></div>
-                <div class="form-group full"><label>후루츠패밀리 상점 주소 (URL)</label><input type="text" id="c-fruits" placeholder="예: https://fruitsfamily.com/seller/..."></div>
+                <div class="form-group full"><label>인스타그램 프로필 주소</label><input type="text" id="c-insta" placeholder="예: https://instagram.com/103selected"></div>
+                <div class="form-group full"><label>후루츠패밀리 상점 주소</label><input type="text" id="c-fruits" placeholder="예: https://fruitsfamily.com/seller/..."></div>
                 <button id="btn-save-contact" class="submit-btn">연락처 저장 및 사이트 반영</button>
             </div>
         </div>
@@ -124,6 +132,7 @@
         let GITHUB_TOKEN = localStorage.getItem('github_token') || "";
         let dbData = { products: [], archives: [], contact: {} }; let dbSha = ""; 
         let editingProductId = null;
+        let editingArchiveId = null;
 
         document.getElementById('p-price').addEventListener('input', function(e) { let value = e.target.value.replace(/[^0-9]/g, ''); e.target.value = value ? '₩' + parseInt(value).toLocaleString('ko-KR') : ''; });
         function switchTab(tabName) { document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); event.target.classList.add('active'); document.getElementById('tab-' + tabName).classList.add('active'); }
@@ -139,11 +148,9 @@
                 dbData = Array.isArray(parsed) && parsed.length === 0 ? { products: [], archives: [], contact: {} } : parsed;
                 if(!dbData.products) dbData.products = []; if(!dbData.archives) dbData.archives = []; if(!dbData.contact) dbData.contact = {};
                 
-                // 기존 CONTACT 정보 불러와서 칸에 채워두기
                 document.getElementById('c-email').value = dbData.contact.email || "103selected@gmail.com";
                 document.getElementById('c-insta').value = dbData.contact.insta || "https://instagram.com/103selected";
                 document.getElementById('c-fruits').value = dbData.contact.fruits || "https://fruitsfamily.com/seller/u1ap/103selected";
-                
                 return true;
             } catch (e) { return false; }
         }
@@ -180,141 +187,109 @@
         if(GITHUB_TOKEN) { fetchDatabase().then(success => { if(success) { document.getElementById('login-screen').style.display = 'none'; document.getElementById('dashboard-screen').style.display = 'block'; renderLists(); } else { localStorage.removeItem('github_token'); } }); }
         document.getElementById('btn-logout').addEventListener('click', () => { localStorage.removeItem('github_token'); location.reload(); });
 
-        // [상품 업로드 & 수정 로직]
+        // [SHOP 업로드 & 수정]
         document.getElementById('btn-add-product').addEventListener('click', async (e) => {
             const btn = e.target;
-            const brand = document.getElementById('p-brand').value.toUpperCase().trim() || 'OTHER BRANDS'; 
+            const brand = document.getElementById('p-brand').value.toUpperCase().trim() || 'UNKNOWN'; 
             const name = document.getElementById('p-name').value;
             const price = document.getElementById('p-price').value;
-            const buyLink = document.getElementById('p-link').value; // ★ 링크 값 가져오기
+            const buyLink = document.getElementById('p-link').value;
+            const newDays = document.getElementById('p-new-days').value; // ★ 뉴어라이블 일수
             const fileInput = document.getElementById('p-image');
 
             if(!name || !price) return alert("상품명과 가격을 입력해주세요.");
-            btn.disabled = true; btn.innerText = editingProductId ? "수정 내용 저장 중... ⏳" : "업로드 중... ⏳";
+            btn.disabled = true; btn.innerText = editingProductId ? "수정 저장 중... ⏳" : "업로드 중... ⏳";
 
             try {
-                let imageUrls = []; 
-                if(fileInput.files.length > 0) imageUrls.push(await uploadImage(fileInput.files[0]));
+                let imageUrls = []; if(fileInput.files.length > 0) imageUrls.push(await uploadImage(fileInput.files[0]));
 
                 if (editingProductId) {
                     const targetItem = dbData.products.find(x => x.id === editingProductId);
-                    targetItem.brand = brand;
-                    targetItem.name = name;
-                    targetItem.category = document.getElementById('p-category').value;
-                    targetItem.price = price;
-                    targetItem.discount = document.getElementById('p-discount').value;
-                    targetItem.buyLink = buyLink; // ★ 링크 수정 반영
+                    targetItem.brand = brand; targetItem.name = name; targetItem.category = document.getElementById('p-category').value;
+                    targetItem.price = price; targetItem.discount = document.getElementById('p-discount').value;
+                    targetItem.buyLink = buyLink; targetItem.newDays = newDays; // ★ 수정 반영
                     targetItem.status = document.getElementById('p-status').value;
                     if (imageUrls.length > 0) targetItem.images = imageUrls;
-                    
-                    await saveDatabase(); alert("상품 수정 완료!");
-                    cancelEdit('shop'); 
+                    await saveDatabase(); alert("상품 수정 완료!"); cancelEdit('shop'); 
                 } else {
                     dbData.products.unshift({
                         id: Date.now().toString(), brand: brand, name: name, category: document.getElementById('p-category').value,
-                        price: price, discount: document.getElementById('p-discount').value, buyLink: buyLink, // ★ 새 상품 링크 추가
+                        price: price, discount: document.getElementById('p-discount').value, buyLink: buyLink, newDays: newDays, // ★ 새 상품 반영
                         status: document.getElementById('p-status').value, images: imageUrls, createdAt: Date.now()
                     });
-                    await saveDatabase(); alert("새 상품 업로드 완료!");
-                    document.querySelectorAll('#tab-shop input').forEach(el => el.value = '');
+                    await saveDatabase(); alert("새 상품 업로드 완료!"); document.querySelectorAll('#tab-shop input').forEach(el => el.value = '');
                 }
                 renderLists();
-            } catch(err) { alert("오류 발생"); console.error(err); } 
-            finally { btn.disabled = false; btn.innerText = editingProductId ? "수정 내용 저장" : "상품 업로드"; }
+            } catch(err) { alert("오류 발생"); console.error(err); } finally { btn.disabled = false; btn.innerText = editingProductId ? "수정 내용 저장" : "상품 업로드"; }
         });
 
-        // [CONTACT 저장 로직]
+        // [CONTACT 저장]
         document.getElementById('btn-save-contact').addEventListener('click', async (e) => {
-            const btn = e.target;
-            btn.disabled = true; btn.innerText = "저장 중... ⏳";
-            try {
-                dbData.contact = {
-                    email: document.getElementById('c-email').value,
-                    insta: document.getElementById('c-insta').value,
-                    fruits: document.getElementById('c-fruits').value
-                };
-                await saveDatabase(); alert("CONTACT 정보가 성공적으로 변경되었습니다!");
-            } catch(err) { alert("오류 발생"); }
-            finally { btn.disabled = false; btn.innerText = "연락처 저장 및 사이트 반영"; }
+            const btn = e.target; btn.disabled = true; btn.innerText = "저장 중... ⏳";
+            try { dbData.contact = { email: document.getElementById('c-email').value, insta: document.getElementById('c-insta').value, fruits: document.getElementById('c-fruits').value }; await saveDatabase(); alert("CONTACT 정보 변경 완료!"); } catch(err) { alert("오류 발생"); } finally { btn.disabled = false; btn.innerText = "연락처 저장 및 사이트 반영"; }
         });
 
-        // 아카이브 (이전과 동일)
+        // [ARCHIVE / VIDEO 업로드 & 수정]
         document.getElementById('btn-add-archive').addEventListener('click', async (e) => {
-            const btn = e.target; const title = document.getElementById('a-title').value; const fileInput = document.getElementById('a-images');
-            if(!title || fileInput.files.length === 0) return alert("필수항목 누락"); btn.disabled = true; btn.innerText = `업로드 중... ⏳`;
+            const btn = e.target; 
+            const category = document.getElementById('a-category').value.toUpperCase().trim() || 'LOOKBOOK'; // 자유 입력
+            const title = document.getElementById('a-title').value; 
+            const youtube = document.getElementById('a-youtube').value; // 유튜브 링크
+            const fileInput = document.getElementById('a-images');
+
+            if(!title) return alert("타이틀은 필수입니다.");
+            btn.disabled = true; btn.innerText = editingArchiveId ? "수정 저장 중... ⏳" : `업로드 중... ⏳`;
+
             try {
-                let imageUrls = []; for(let i=0; i < fileInput.files.length; i++) imageUrls.push(await uploadImage(fileInput.files[i]));
-                dbData.archives.unshift({ id: Date.now().toString(), category: document.getElementById('a-category').value, prefix: document.getElementById('a-prefix').value, title: title, desc: document.getElementById('a-desc').value, images: imageUrls, createdAt: Date.now() });
-                await saveDatabase(); alert("컬렉션 완료!"); document.querySelectorAll('#tab-archive input, #tab-archive textarea').forEach(el => el.value = ''); renderLists();
-            } catch(err) { alert("오류 발생"); } finally { btn.disabled = false; btn.innerText = "컬렉션 업로드"; }
+                let imageUrls = []; 
+                if(!editingArchiveId || fileInput.files.length > 0) {
+                    for(let i=0; i < fileInput.files.length; i++) imageUrls.push(await uploadImage(fileInput.files[i]));
+                }
+
+                if (editingArchiveId) {
+                    const targetItem = dbData.archives.find(x => x.id === editingArchiveId);
+                    targetItem.category = category; targetItem.prefix = document.getElementById('a-prefix').value;
+                    targetItem.title = title; targetItem.desc = document.getElementById('a-desc').value; targetItem.youtube = youtube;
+                    if (imageUrls.length > 0) targetItem.images = imageUrls;
+                    await saveDatabase(); alert("콘텐츠 수정 완료!"); cancelEdit('archive');
+                } else {
+                    dbData.archives.unshift({ id: Date.now().toString(), category: category, prefix: document.getElementById('a-prefix').value, title: title, desc: document.getElementById('a-desc').value, youtube: youtube, images: imageUrls, createdAt: Date.now() });
+                    await saveDatabase(); alert("콘텐츠 발행 완료!"); document.querySelectorAll('#tab-archive input, #tab-archive textarea').forEach(el => el.value = '');
+                }
+                renderLists();
+            } catch(err) { alert("오류 발생"); } finally { btn.disabled = false; btn.innerText = editingArchiveId ? "수정 내용 저장" : "콘텐츠 업로드"; }
         });
 
-        window.editItem = (id) => {
-            const item = dbData.products.find(x => x.id === id);
-            if(!item) return;
-            editingProductId = id; 
-            
-            document.getElementById('p-brand').value = item.brand || '';
-            document.getElementById('p-name').value = item.name || '';
-            document.getElementById('p-category').value = item.category || 'OUTER';
-            document.getElementById('p-status').value = item.status || 'available';
-            document.getElementById('p-price').value = item.price || '';
-            document.getElementById('p-discount').value = item.discount || '';
-            document.getElementById('p-link').value = item.buyLink || ''; // ★ 폼에 기존 URL 채우기
-
-            document.getElementById('shop-form-box').style.border = '2px solid #000';
-            document.getElementById('shop-form-title').innerText = `✏️ 상품 정보 수정 중: ${item.name}`;
-            document.getElementById('btn-add-product').innerText = "수정 내용 저장";
-            document.getElementById('btn-add-product').style.backgroundColor = "#ffeb3b";
-            document.getElementById('btn-add-product').style.color = "#000";
-            document.getElementById('btn-cancel-shop-edit').style.display = "block";
-            
+        window.editItem = (id, type) => {
+            if (type === 'shop') {
+                const item = dbData.products.find(x => x.id === id); if(!item) return; editingProductId = id; 
+                document.getElementById('p-brand').value = item.brand || ''; document.getElementById('p-name').value = item.name || ''; document.getElementById('p-category').value = item.category || 'OUTER'; document.getElementById('p-status').value = item.status || 'available'; document.getElementById('p-price').value = item.price || ''; document.getElementById('p-discount').value = item.discount || ''; document.getElementById('p-link').value = item.buyLink || ''; document.getElementById('p-new-days').value = item.newDays || '';
+                document.getElementById('shop-form-box').style.border = '2px solid #000'; document.getElementById('shop-form-title').innerText = `✏️ 수정 중: ${item.name}`; document.getElementById('btn-add-product').innerText = "수정 내용 저장"; document.getElementById('btn-add-product').style.backgroundColor = "#ffeb3b"; document.getElementById('btn-add-product').style.color = "#000"; document.getElementById('btn-cancel-shop-edit').style.display = "block"; 
+            } else if (type === 'archive') {
+                const item = dbData.archives.find(x => x.id === id); if(!item) return; editingArchiveId = id;
+                document.getElementById('a-category').value = item.category || ''; document.getElementById('a-prefix').value = item.prefix || ''; document.getElementById('a-title').value = item.title || ''; document.getElementById('a-youtube').value = item.youtube || ''; document.getElementById('a-desc').value = item.desc || '';
+                document.getElementById('archive-form-box').style.border = '2px solid #000'; document.getElementById('archive-form-title').innerText = `✏️ 수정 중: ${item.title}`; document.getElementById('btn-add-archive').innerText = "수정 내용 저장"; document.getElementById('btn-add-archive').style.backgroundColor = "#ffeb3b"; document.getElementById('btn-add-archive').style.color = "#000"; document.getElementById('btn-cancel-archive-edit').style.display = "block";
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' }); 
         };
 
         window.cancelEdit = (type) => {
-            if (type === 'shop') {
-                editingProductId = null;
-                document.querySelectorAll('#tab-shop input').forEach(el => el.value = '');
-                document.getElementById('shop-form-box').style.border = 'none';
-                document.getElementById('shop-form-title').innerText = "+ 새 상품 등록";
-                document.getElementById('btn-add-product').innerText = "상품 업로드";
-                document.getElementById('btn-add-product').style.backgroundColor = "#000";
-                document.getElementById('btn-add-product').style.color = "#fff";
-                document.getElementById('btn-cancel-shop-edit').style.display = "none";
-            }
+            if (type === 'shop') { editingProductId = null; document.querySelectorAll('#tab-shop input').forEach(el => el.value = ''); document.getElementById('shop-form-box').style.border = 'none'; document.getElementById('shop-form-title').innerText = "+ 새 상품 등록"; document.getElementById('btn-add-product').innerText = "상품 업로드"; document.getElementById('btn-add-product').style.backgroundColor = "#000"; document.getElementById('btn-add-product').style.color = "#fff"; document.getElementById('btn-cancel-shop-edit').style.display = "none"; }
+            if (type === 'archive') { editingArchiveId = null; document.querySelectorAll('#tab-archive input, #tab-archive textarea').forEach(el => el.value = ''); document.getElementById('archive-form-box').style.border = 'none'; document.getElementById('archive-form-title').innerText = "+ 아카이브 / 비디오 발행"; document.getElementById('btn-add-archive').innerText = "콘텐츠 업로드"; document.getElementById('btn-add-archive').style.backgroundColor = "#000"; document.getElementById('btn-add-archive').style.color = "#fff"; document.getElementById('btn-cancel-archive-edit').style.display = "none"; }
         };
 
         function renderLists() {
             const shopContainer = document.getElementById('product-list-container'); shopContainer.innerHTML = '';
             dbData.products.forEach(item => {
                 const imgSrc = item.images && item.images.length > 0 ? item.images[0] : '';
-                let priceDisplay = item.price; if (item.discount && item.discount > 0) priceDisplay = `<span class="original-price">${item.price}</span> <span class="discount-text">(${item.discount}%)</span>`;
-                
-                shopContainer.innerHTML += `
-                    <div class="list-item">
-                        <div class="item-info-box">
-                            <img src="${imgSrc}">
-                            <div class="item-text">
-                                <div class="item-name">[${item.brand}] ${item.name}</div>
-                                <div class="item-meta">가격: ${priceDisplay} | 상태: ${item.status}</div>
-                                <div class="item-meta" style="color:#2196F3;">링크: ${item.buyLink ? '등록됨' : '없음'}</div>
-                            </div>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-edit" onclick="editItem('${item.id}')">수정</button>
-                            <button class="btn-delete" onclick="deleteItem('products', '${item.id}')">삭제</button>
-                        </div>
-                    </div>`;
+                shopContainer.innerHTML += `<div class="list-item"><div class="item-info-box"><img src="${imgSrc}"><div class="item-text"><div class="item-name">[${item.brand}] ${item.name}</div><div class="item-meta">상태: ${item.status} ${item.newDays ? `| NEW(${item.newDays}일)` : ''}</div></div></div><div class="item-actions"><button class="btn-edit" onclick="editItem('${item.id}', 'shop')">수정</button><button class="btn-delete" onclick="deleteItem('products', '${item.id}')">삭제</button></div></div>`;
             });
-
             const archiveContainer = document.getElementById('archive-list-container'); archiveContainer.innerHTML = '';
             dbData.archives.forEach(item => {
                 const prefixText = item.prefix ? `${item.prefix} ` : '';
-                archiveContainer.innerHTML += `<div class="list-item"><div class="item-info-box"><div class="item-text"><div class="item-name">[${item.category}] ${prefixText}${item.title}</div><div class="item-meta">${item.desc ? item.desc : '설명 없음'}</div></div></div><div class="item-actions"><button class="btn-delete" onclick="deleteItem('archives', '${item.id}')">삭제</button></div></div>`;
+                archiveContainer.innerHTML += `<div class="list-item"><div class="item-info-box"><div class="item-text"><div class="item-name">[${item.category}] ${prefixText}${item.title}</div><div class="item-meta">${item.youtube ? '유튜브 링크 있음' : '사진만 있음'}</div></div></div><div class="item-actions"><button class="btn-edit" onclick="editItem('${item.id}', 'archive')">수정</button><button class="btn-delete" onclick="deleteItem('archives', '${item.id}')">삭제</button></div></div>`;
             });
         }
-        
         window.deleteItem = async (type, id) => { if(confirm("삭제하시겠습니까?")) { dbData[type] = dbData[type].filter(x => x.id !== id); await saveDatabase(); renderLists(); } };
     </script>
 </body>
