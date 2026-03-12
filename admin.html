@@ -32,16 +32,17 @@
         .submit-btn { grid-column: 1 / -1; padding: 15px; background: #000; color: #fff; border: none; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
         .submit-btn:disabled { background: #999; cursor: wait; }
 
-        .item-list { display: flex; flex-direction: column; gap: 15px; }
-        .list-item { background: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #000; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .item-list { display: flex; flex-direction: column; gap: 10px; }
+        .list-item { background: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #000; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .item-info-box { display: flex; align-items: center; gap: 15px; }
         .item-info-box img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; background: #eee; }
         .item-text { display: flex; flex-direction: column; gap: 5px; }
         .item-name { font-weight: bold; font-size: 16px; }
-        .item-meta { color: #666; font-size: 13px; max-width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item-meta { color: #666; font-size: 13px; }
         
-        .item-actions { display: flex; gap: 8px; }
-        .btn-edit { padding: 8px 12px; border: 1px solid #000; background: #fff; color: #000; cursor: pointer; font-size: 12px; }
+        .item-actions { display: flex; gap: 5px; align-items: center; }
+        .btn-move { padding: 8px 10px; border: 1px solid #ccc; background: #f9f9f9; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .btn-edit { padding: 8px 12px; border: 1px solid #000; background: #fff; color: #000; cursor: pointer; font-size: 12px; margin-left: 10px; }
         .btn-delete { padding: 8px 12px; border: none; background: #ff4444; color: #fff; cursor: pointer; font-size: 12px; }
     </style>
 </head>
@@ -73,7 +74,7 @@
                     <span id="shop-form-title">+ 새 상품 등록</span>
                     <button class="btn-cancel-edit" id="btn-cancel-shop-edit" onclick="cancelEdit('shop')">수정 취소</button>
                 </h2>
-                <div class="form-group"><label>브랜드명 (1개면 자동으로 OTHER BRANDS로 감)</label><input type="text" id="p-brand" placeholder="예: HELMUT LANG"></div>
+                <div class="form-group"><label>브랜드명</label><input type="text" id="p-brand" placeholder="예: HELMUT LANG"></div>
                 <div class="form-group"><label>상품명</label><input type="text" id="p-name" placeholder="예: 1998 Raw Denim Jacket"></div>
                 <div class="form-group"><label>카테고리</label><select id="p-category"><option value="OUTER">OUTER</option><option value="TOP">TOP</option><option value="BOTTOM">BOTTOM</option><option value="SHOES">SHOES</option><option value="ACC">ACC</option></select></div>
                 <div class="form-group"><label>판매 상태</label><select id="p-status"><option value="available">판매중</option><option value="coming">커밍순</option><option value="sold">품절</option></select></div>
@@ -84,12 +85,12 @@
                 <div class="form-group"><label>구매 링크 (URL)</label><input type="text" id="p-link" placeholder="예: https://fruitsfamily.com/..."></div>
                 
                 <div class="form-group full">
-                    <label id="p-image-label">상품 사진 첨부 (1장) *수정 시 비워두면 기존 유지</label>
-                    <input type="file" id="p-image" class="file-input-wrapper" accept="image/*">
+                    <label id="p-image-label">상품 사진 여러 장 첨부 가능 (드래그 앤 드롭)</label>
+                    <input type="file" id="p-image" class="file-input-wrapper" accept="image/*" multiple>
                 </div>
                 <button id="btn-add-product" class="submit-btn">상품 업로드</button>
             </div>
-            <h2>등록된 상품 목록</h2>
+            <h2>등록된 상품 목록 (▲▼ 버튼으로 순서 변경)</h2>
             <div class="item-list" id="product-list-container"></div>
         </div>
 
@@ -99,7 +100,7 @@
                     <span id="archive-form-title">+ 아카이브 / 비디오 발행</span>
                     <button class="btn-cancel-edit" id="btn-cancel-archive-edit" onclick="cancelEdit('archive')">수정 취소</button>
                 </h2>
-                <div class="form-group"><label>메뉴(구분) 이름 직접 입력</label><input type="text" id="a-category" placeholder="예: LOOKBOOK, VIDEO, FLEA MARKET 등"></div>
+                <div class="form-group"><label>메뉴 이름 직접 입력</label><input type="text" id="a-category" placeholder="예: LOOKBOOK, VIDEO, FLEA MARKET 등"></div>
                 <div class="form-group"><label>넘버링</label><input type="text" id="a-prefix" placeholder="예: 01."></div>
                 <div class="form-group full"><label>타이틀</label><input type="text" id="a-title" placeholder="주제 입력"></div>
                 <div class="form-group full"><label style="color:#e52d27; font-weight:bold;">유튜브 주소 (VIDEO일 경우 필수)</label><input type="text" id="a-youtube" placeholder="예: https://www.youtube.com/watch?v=..."></div>
@@ -107,7 +108,7 @@
                 <div class="form-group full"><label>사진 여러 장 첨부 (비디오만 올리려면 비워두세요)</label><input type="file" id="a-images" class="file-input-wrapper" accept="image/*" multiple></div>
                 <button id="btn-add-archive" class="submit-btn">콘텐츠 업로드</button>
             </div>
-            <h2>발행된 아카이브/비디오 목록</h2>
+            <h2>발행된 아카이브 목록 (▲▼ 버튼으로 순서 변경)</h2>
             <div class="item-list" id="archive-list-container"></div>
         </div>
 
@@ -181,15 +182,17 @@
 
         document.getElementById('btn-add-product').addEventListener('click', async (e) => {
             const btn = e.target; const brand = document.getElementById('p-brand').value.toUpperCase().trim() || 'UNKNOWN'; const name = document.getElementById('p-name').value; const price = document.getElementById('p-price').value; const buyLink = document.getElementById('p-link').value; const newDays = document.getElementById('p-new-days').value; const fileInput = document.getElementById('p-image');
-            if(!name || !price) return alert("상품명과 가격을 입력해주세요."); btn.disabled = true; btn.innerText = editingProductId ? "수정 저장 중... ⏳" : "업로드 중... ⏳";
+            if(!name || !price) return alert("상품명과 가격을 입력해주세요."); btn.disabled = true; btn.innerText = editingProductId ? "수정 저장 중... ⏳" : "여러 장 업로드 중... ⏳";
             try {
-                let imageUrls = []; if(fileInput.files.length > 0) imageUrls.push(await uploadImage(fileInput.files[0]));
+                let imageUrls = []; 
+                for(let i=0; i < fileInput.files.length; i++) imageUrls.push(await uploadImage(fileInput.files[i]));
+
                 if (editingProductId) {
                     const targetItem = dbData.products.find(x => x.id === editingProductId);
                     targetItem.brand = brand; targetItem.name = name; targetItem.category = document.getElementById('p-category').value; targetItem.price = price; targetItem.discount = document.getElementById('p-discount').value; targetItem.buyLink = buyLink; targetItem.newDays = newDays; targetItem.status = document.getElementById('p-status').value; if (imageUrls.length > 0) targetItem.images = imageUrls;
                     await saveDatabase(); alert("상품 수정 완료!"); cancelEdit('shop'); 
                 } else {
-                    dbData.products.unshift({ id: Date.now().toString(), brand: brand, name: name, category: document.getElementById('p-category').value, price: price, discount: document.getElementById('p-discount').value, buyLink: buyLink, newDays: newDays, status: document.getElementById('p-status').value, images: imageUrls, createdAt: Date.now() });
+                    dbData.products.push({ id: Date.now().toString(), brand: brand, name: name, category: document.getElementById('p-category').value, price: price, discount: document.getElementById('p-discount').value, buyLink: buyLink, newDays: newDays, status: document.getElementById('p-status').value, images: imageUrls, createdAt: Date.now() });
                     await saveDatabase(); alert("새 상품 업로드 완료!"); document.querySelectorAll('#tab-shop input').forEach(el => el.value = '');
                 }
                 renderLists();
@@ -209,7 +212,7 @@
                 if (editingArchiveId) {
                     const targetItem = dbData.archives.find(x => x.id === editingArchiveId); targetItem.category = category; targetItem.prefix = document.getElementById('a-prefix').value; targetItem.title = title; targetItem.desc = document.getElementById('a-desc').value; targetItem.youtube = youtube; if (imageUrls.length > 0) targetItem.images = imageUrls; await saveDatabase(); alert("콘텐츠 수정 완료!"); cancelEdit('archive');
                 } else {
-                    dbData.archives.unshift({ id: Date.now().toString(), category: category, prefix: document.getElementById('a-prefix').value, title: title, desc: document.getElementById('a-desc').value, youtube: youtube, images: imageUrls, createdAt: Date.now() }); await saveDatabase(); alert("콘텐츠 발행 완료!"); document.querySelectorAll('#tab-archive input, #tab-archive textarea').forEach(el => el.value = '');
+                    dbData.archives.push({ id: Date.now().toString(), category: category, prefix: document.getElementById('a-prefix').value, title: title, desc: document.getElementById('a-desc').value, youtube: youtube, images: imageUrls, createdAt: Date.now() }); await saveDatabase(); alert("콘텐츠 발행 완료!"); document.querySelectorAll('#tab-archive input, #tab-archive textarea').forEach(el => el.value = '');
                 }
                 renderLists();
             } catch(err) { alert("오류 발생"); } finally { btn.disabled = false; btn.innerText = editingArchiveId ? "수정 내용 저장" : "콘텐츠 업로드"; }
@@ -233,16 +236,33 @@
             if (type === 'archive') { editingArchiveId = null; document.querySelectorAll('#tab-archive input, #tab-archive textarea').forEach(el => el.value = ''); document.getElementById('archive-form-box').style.border = 'none'; document.getElementById('archive-form-title').innerText = "+ 아카이브 / 비디오 발행"; document.getElementById('btn-add-archive').innerText = "콘텐츠 업로드"; document.getElementById('btn-add-archive').style.backgroundColor = "#000"; document.getElementById('btn-add-archive').style.color = "#fff"; document.getElementById('btn-cancel-archive-edit').style.display = "none"; }
         };
 
+        // ★ 순서 변경 (위로 / 아래로) 로직 ★
+        window.moveItem = async (type, id, direction) => {
+            const arr = dbData[type];
+            const index = arr.findIndex(x => x.id === id);
+            if (index < 0) return;
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= arr.length) return; // 맨끝이거나 맨앞이면 무시
+            
+            // 두 항목 위치 바꾸기
+            const temp = arr[index];
+            arr[index] = arr[newIndex];
+            arr[newIndex] = temp;
+            
+            await saveDatabase();
+            renderLists();
+        };
+
         function renderLists() {
             const shopContainer = document.getElementById('product-list-container'); shopContainer.innerHTML = '';
             dbData.products.forEach(item => {
                 const imgSrc = item.images && item.images.length > 0 ? item.images[0] : '';
-                shopContainer.innerHTML += `<div class="list-item"><div class="item-info-box"><img src="${imgSrc}"><div class="item-text"><div class="item-name">[${item.brand}] ${item.name}</div><div class="item-meta">상태: ${item.status} ${item.newDays ? `| NEW(${item.newDays}일)` : ''}</div></div></div><div class="item-actions"><button class="btn-edit" onclick="editItem('${item.id}', 'shop')">수정</button><button class="btn-delete" onclick="deleteItem('products', '${item.id}')">삭제</button></div></div>`;
+                shopContainer.innerHTML += `<div class="list-item"><div class="item-info-box"><img src="${imgSrc}"><div class="item-text"><div class="item-name">[${item.brand}] ${item.name}</div><div class="item-meta">상태: ${item.status}</div></div></div><div class="item-actions"><button class="btn-move" onclick="moveItem('products', '${item.id}', -1)">▲</button><button class="btn-move" onclick="moveItem('products', '${item.id}', 1)">▼</button><button class="btn-edit" onclick="editItem('${item.id}', 'shop')">수정</button><button class="btn-delete" onclick="deleteItem('products', '${item.id}')">삭제</button></div></div>`;
             });
             const archiveContainer = document.getElementById('archive-list-container'); archiveContainer.innerHTML = '';
             dbData.archives.forEach(item => {
                 const prefixText = item.prefix ? `${item.prefix} ` : '';
-                archiveContainer.innerHTML += `<div class="list-item"><div class="item-info-box"><div class="item-text"><div class="item-name">[${item.category}] ${prefixText}${item.title}</div><div class="item-meta">${item.youtube ? '유튜브 링크 있음' : '사진만 있음'}</div></div></div><div class="item-actions"><button class="btn-edit" onclick="editItem('${item.id}', 'archive')">수정</button><button class="btn-delete" onclick="deleteItem('archives', '${item.id}')">삭제</button></div></div>`;
+                archiveContainer.innerHTML += `<div class="list-item"><div class="item-info-box"><div class="item-text"><div class="item-name">[${item.category}] ${prefixText}${item.title}</div></div></div><div class="item-actions"><button class="btn-move" onclick="moveItem('archives', '${item.id}', -1)">▲</button><button class="btn-move" onclick="moveItem('archives', '${item.id}', 1)">▼</button><button class="btn-edit" onclick="editItem('${item.id}', 'archive')">수정</button><button class="btn-delete" onclick="deleteItem('archives', '${item.id}')">삭제</button></div></div>`;
             });
         }
         window.deleteItem = async (type, id) => { if(confirm("삭제하시겠습니까?")) { dbData[type] = dbData[type].filter(x => x.id !== id); await saveDatabase(); renderLists(); } };
