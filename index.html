@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>103 SELECTED</title>
+    <style>
+        /* --- 1. 폰트 및 배경 세팅 --- */
+        body, html { margin: 0; padding: 0; width: 100%; height: 100vh; background-color: #ffffff; font-family: 'Helvetica', 'Apple SD Gothic Neo', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+
+        /* --- 2. 초기 화면: 중앙 로고 --- */
+        .logo-btn { position: absolute; display: flex; font-size: 6vw; font-weight: bold; color: #000000; cursor: pointer; z-index: 50; }
+        .logo-btn:hover { opacity: 0.5; }
+        .split-left, .split-right { transition: all 1s cubic-bezier(0.25, 1, 0.5, 1); }
+
+        /* --- 3. 메뉴 & 내비게이션 --- */
+        .top-left-logo { position: absolute; top: 40px; left: 50px; font-size: 1.5vw; font-weight: bold; color: #000000; letter-spacing: 1px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100; cursor: pointer; }
+        .top-left-logo:hover { opacity: 0.5; }
+
+        .center-menu { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 7vh; opacity: 0; transform: translateY(20px); pointer-events: none; transition: all 0.3s ease; z-index: 40; }
+        .menu-item { font-size: 3.5vw; font-weight: bold; color: #000000; cursor: pointer; letter-spacing: 4px; transition: transform 0.3s ease; }
+        .menu-item:hover { transform: scale(1.2); }
+
+        .top-right-nav { position: absolute; top: 40px; right: 50px; display: flex; gap: 2.5vw; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100; }
+        .nav-item { font-size: 1vw; font-weight: bold; color: #000000; cursor: pointer; letter-spacing: 2px; transition: opacity 0.3s ease; }
+        .nav-item:hover { opacity: 0.4; }
+
+        /* --- 4. 각 페이지 화면 레이아웃 --- */
+        .page-content { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 20; }
+        #page-shop { display: block; overflow-y: auto; scrollbar-width: none; }
+        #page-shop::-webkit-scrollbar { display: none; } 
+        
+        .shop-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 15vh; padding-bottom: 40vh; width: 75vw; margin: auto; }
+
+        #view-shop-main { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 12vh; margin-top: 10vh; }
+        .shop-main-item { font-size: 3vw; font-weight: bold; color: #000; cursor: pointer; letter-spacing: 5px; transition: all 0.3s ease; }
+        .shop-main-item:hover { color: #888; transform: scale(1.1); }
+
+        #view-sub-menu { display: none; flex-direction: column; align-items: center; width: 100%; position: relative; }
+        #sub-menu-container { display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 8vh; }
+        
+        .sub-menu-item { font-size: 2.5vw; font-weight: bold; color: #000; cursor: pointer; letter-spacing: 4px; margin-bottom: 5vh; transition: all 0.3s ease; text-align: center; }
+        .sub-menu-item:hover { color: #888; transform: scale(1.1); }
+
+        .btn-back { position: absolute; top: 0.2vh; left: 0; font-size: 1vw; font-weight: bold; color: #999; cursor: pointer; letter-spacing: 2px; transition: color 0.3s ease; z-index: 10; }
+        .btn-back:hover { color: #000; }
+
+        .current-list-title { font-size: 2vw; font-weight: bold; color: #000; letter-spacing: 5px; margin-bottom: 8vh; border-bottom: 2px solid #000; padding-bottom: 1vh; width: 100%; text-align: center; }
+
+        #view-item-list { display: none; flex-direction: column; align-items: center; width: 100%; position: relative; }
+        #item-list-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8vh 4vw; width: 100%; }
+        .shop-grid-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.3s ease; }
+        .shop-grid-item:hover { transform: translateY(-1vh); }
+
+        .grid-image-wrapper { position: relative; width: 100%; aspect-ratio: 3 / 4; background-color: #f4f4f4; margin-bottom: 2vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .grid-image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        .grid-no-image { font-size: 0.8vw; color: #aaa; letter-spacing: 2px; font-weight: bold; }
+
+        .grid-title { font-size: 1.1vw; font-weight: bold; color: #000; text-align: center; letter-spacing: 1px; margin-bottom: 0.5vh; width: 90%; line-height: 1.4; }
+        .grid-price { font-size: 1vw; font-weight: normal; color: #666; letter-spacing: 1px; }
+
+        .sold-text .grid-title, .sold-text .grid-price { color: #bbb; }
+        .sold-image-wrapper::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom right, transparent calc(50% - 0.5px), rgba(0,0,0,0.2) calc(50% - 0.5px), rgba(0,0,0,0.2) calc(50% + 0.5px), transparent calc(50% + 0.5px)), linear-gradient(to top right, transparent calc(50% - 0.5px), rgba(0,0,0,0.2) calc(50% - 0.5px), rgba(0,0,0,0.2) calc(50% + 0.5px), transparent calc(50% + 0.5px)); pointer-events: none; }
+
+        .archive-list { display: flex; flex-direction: column; align-items: center; gap: 12vh; }
+        .archive-menu-item { font-size: 3vw; font-weight: bold; color: #000000; cursor: pointer; letter-spacing: 3px; transition: all 0.3s ease; }
+        .archive-menu-item:hover { color: #888; transform: scale(1.1); }
+
+        .contact-list { display: flex; flex-direction: column; align-items: flex-start; gap: 6vh; font-size: 1.8vw; font-weight: bold; color: #000; letter-spacing: 2px; line-height: 1.8; }
+        .contact-list a { color: #000; text-decoration: none; border-bottom: 1px solid #000; padding-bottom: 2px; transition: color 0.3s, border-color 0.3s; }
+        .contact-list a:hover { color: #888; border-color: #888; }
+
+        /* --- 5. 팝업(Modal) 창 --- */
+        .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: all 0.5s ease; z-index: 200; }
+        .modal-content { position: relative; width: 65vw; height: 75vh; display: flex; flex-direction: column; transform: translateY(20px); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .btn-close-modal { align-self: flex-end; font-size: 1.2vw; font-weight: bold; cursor: pointer; margin-bottom: 3vh; letter-spacing: 2px; transition: opacity 0.3s ease; }
+        .btn-close-modal:hover { opacity: 0.4; }
+        .modal-gallery { display: flex; gap: 2vw; height: 50vh; overflow-x: auto; scrollbar-width: none; }
+        .modal-gallery::-webkit-scrollbar { display: none; }
+        
+        .modal-image { min-width: 35vw; height: 100%; display: flex; justify-content: center; align-items: center; font-size: 1vw; color: #999; letter-spacing: 2px; background-color: #f0f0f0; }
+        img.modal-image { object-fit: contain; background-color: transparent; }
+
+        .modal-info { margin-top: 3vh; font-size: 1.1vw; line-height: 1.6; color: #000; letter-spacing: 1px; }
+
+        .buy-btn-container { position: absolute; bottom: 0; right: 0; }
+        .buy-btn { font-size: 1.5vw; font-weight: bold; color: #000; cursor: pointer; text-decoration: none; letter-spacing: 2px; transition: opacity 0.3s ease; }
+        .buy-btn:hover { opacity: 0.4; }
+        .disable-btn { color: #ccc; cursor: default; }
+        .disable-btn:hover { opacity: 1; }
+
+        /* --- 6. 상태 변화 애니메이션 --- */
+        body.menu-mode .logo-btn { pointer-events: none; }
+        body.menu-mode .split-left { transform: translateX(-10vw); opacity: 0; filter: blur(8px); }
+        body.menu-mode .split-right { transform: translateX(10vw); opacity: 0; filter: blur(8px); }
+        body.menu-mode .center-menu { opacity: 1; pointer-events: auto; transform: translateY(0); transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.2s; }
+        body.menu-mode .top-left-logo { opacity: 1; pointer-events: auto; transition: opacity 0.8s ease 0.4s; }
+
+        body.page-mode .logo-btn { pointer-events: none; }
+        body.page-mode .split-left { transform: translateX(-10vw); opacity: 0; filter: blur(8px); }
+        body.page-mode .split-right { transform: translateX(10vw); opacity: 0; filter: blur(8px); }
+        body.page-mode .top-left-logo { opacity: 1; pointer-events: auto; transition: opacity 0.8s ease 0s; }
+        body.page-mode .top-right-nav { opacity: 1; pointer-events: auto; transition: opacity 0.8s ease 0.2s; }
+        .page-content.active { opacity: 1; pointer-events: auto; transition: opacity 0.8s ease 0.4s; }
+
+        body.modal-open .modal-overlay { opacity: 1; pointer-events: auto; }
+        body.modal-open .modal-content { transform: translateY(0); }
+
+        /* --- 7. ★ 모바일 반응형 디자인 --- */
+        @media (max-width: 768px) {
+            .logo-btn { font-size: 12vw; }
+            .top-left-logo { top: 20px; left: 20px; font-size: 4vw; }
+            .top-right-nav { top: 20px; right: 20px; gap: 4vw; }
+            .nav-item { font-size: 3vw; }
+            .menu-item { font-size: 8vw; }
+            
+            .shop-wrapper { width: 90vw; padding-top: 10vh; }
+            #item-list-container { grid-template-columns: repeat(2, 1fr); gap: 4vh 3vw; }
+            
+            .grid-title { font-size: 3vw; width: 100%; }
+            .grid-price { font-size: 2.5vw; }
+            .btn-back { font-size: 3vw; top: -3vh; }
+            .current-list-title { font-size: 5vw; }
+            .shop-main-item, .sub-menu-item { font-size: 6vw; }
+
+            .modal-content { width: 90vw; height: 80vh; }
+            .modal-image { min-width: 80vw; }
+            .btn-close-modal { font-size: 4vw; }
+            .modal-info { font-size: 3.5vw; }
+            .buy-btn { font-size: 4.5vw; }
+            
+            .contact-list { font-size: 4vw; align-items: center; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-left-logo" id="btn-home">103 SELECTED</div>
+    <div class="top-right-nav">
+        <div class="nav-item" onclick="openPage('shop')">SHOP</div>
+        <div class="nav-item" onclick="openPage('archive')">ARCHIVE</div>
+        <div class="nav-item" onclick="openPage('contact')">CONTACT</div>
+    </div>
+    <div class="logo-btn" id="btn-main-logo"><span class="split-left">103&nbsp;</span><span class="split-right">SELECTED</span></div>
+    <div class="center-menu">
+        <div class="menu-item" onclick="openPage('shop')">SHOP</div>
+        <div class="menu-item" onclick="openPage('archive')">ARCHIVE</div>
+        <div class="menu-item" onclick="openPage('contact')">CONTACT</div>
+    </div>
+
+    <div class="page-content" id="page-shop">
+        <div class="shop-wrapper">
+            <div id="view-shop-main">
+                <div class="shop-main-item" onclick="showItemList('ALL', 'ALL')">ALL</div>
+                <div class="shop-main-item" onclick="showSubMenu('BRANDS')">BRANDS</div>
+                <div class="shop-main-item" onclick="showSubMenu('CATEGORIES')">CATEGORIES</div>
+            </div>
+
+            <div id="view-sub-menu">
+                <div class="btn-back" onclick="showShopMain()">< BACK</div>
+                <div id="sub-menu-container"></div>
+            </div>
+
+            <div id="view-item-list">
+                <div class="btn-back" id="btn-back-to-menu">< BACK</div>
+                <div class="current-list-title" id="current-list-title">TITLE</div>
+                <div id="item-list-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content" id="page-archive">
+        <div class="archive-list">
+            <div class="archive-menu-item">LOOKBOOK</div>
+            <div class="archive-menu-item">FLEA MARKET</div>
+        </div>
+    </div>
+
+    <div class="page-content" id="page-contact">
+        <div class="contact-list">
+            <div>Mail: 103selected@gmail.com</div>
+            <div>INSTAGRAM: <a href="https://instagram.com/103selected" target="_blank">@103selected</a></div>
+            <div>FRUITSFAMILY: <a href="https://fruitsfamily.com/seller/u1ap/103selected" target="_blank">@103SELECTED</a></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-content">
+            <div class="btn-close-modal" id="btn-close-modal">CLOSE</div>
+            <div class="modal-gallery" id="modal-gallery"></div>
+            <div class="modal-info" id="modal-info"></div>
+            <div class="buy-btn-container" id="buy-btn-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const GITHUB_OWNER = "103selected";
+        const GITHUB_REPO = "103-selected";
+        const DB_URL = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/database.json?t=${Date.now()}`;
+
+        let products = []; 
+
+        async function loadDatabase() {
+            try {
+                const response = await fetch(DB_URL);
+                if (!response.ok) throw new Error("데이터를 찾을 수 없습니다.");
+                const globalData = await response.json();
+                products = globalData.products || [];
+            } catch (error) {
+                console.error("데이터 로딩 실패:", error);
+            }
+        }
+        window.onload = loadDatabase;
+
+        function formatPrice(originalStr, discountStr) {
+            if (!discountStr || discountStr.trim() === "" || parseInt(discountStr) === 0) return originalStr;
+            const origNum = parseInt(originalStr.replace(/[^0-9]/g, ''));
+            const discNum = parseInt(discountStr);
+            const finalNum = Math.floor(origNum * ((100 - discNum) / 100));
+            const finalStr = '₩' + finalNum.toLocaleString('ko-KR');
+            return `<span style="text-decoration:line-through; color:#aaa; font-size:0.8em; margin-right:5px;">${originalStr}</span><span style="color:#d32f2f; font-weight:bold; margin-right:5px;">(${discNum}%)</span><span style="color:#000;">${finalStr}</span>`;
+        }
+
+        const body = document.body;
+        const btnMainLogo = document.getElementById('btn-main-logo');
+        const btnHome = document.getElementById('btn-home');
+        const pages = document.querySelectorAll('.page-content');
+        const btnCloseModal = document.getElementById('btn-close-modal');
+
+        const viewShopMain = document.getElementById('view-shop-main');
+        const viewSubMenu = document.getElementById('view-sub-menu');
+        const viewItemList = document.getElementById('view-item-list');
+        const subMenuContainer = document.getElementById('sub-menu-container');
+        const itemListContainer = document.getElementById('item-list-container');
+        const currentListTitle = document.getElementById('current-list-title');
+        const btnBackToMenu = document.getElementById('btn-back-to-menu');
+
+        btnMainLogo.addEventListener('click', () => { body.className = 'menu-mode'; });
+        btnHome.addEventListener('click', () => { body.className = ''; hideAllPages(); });
+        
+        function openPage(pageId) { body.className = 'page-mode'; hideAllPages(); document.getElementById('page-' + pageId).classList.add('active'); if(pageId === 'shop') { showShopMain(); } }
+        function hideAllPages() { pages.forEach(page => { page.classList.remove('active'); }); }
+
+        function showShopMain() { viewSubMenu.style.display = 'none'; viewItemList.style.display = 'none'; viewShopMain.style.display = 'flex'; }
+
+        // ★ 브랜드명 자동 추출 시스템 (하드코딩 제거!) ★
+        function showSubMenu(type) {
+            viewShopMain.style.display = 'none';
+            viewItemList.style.display = 'none';
+            viewSubMenu.style.display = 'flex';
+            subMenuContainer.innerHTML = '';
+            
+            if (type === 'BRANDS') {
+                // 1. 등록된 옷에서 브랜드 이름들만 쏙쏙 뽑아오기
+                let uniqueBrands = [...new Set(products.map(p => p.brand || "OTHER BRANDS"))];
+                
+                // 2. 가나다(알파벳) 순으로 정렬하되, 'OTHER BRANDS'는 무조건 맨 밑으로 보내기
+                uniqueBrands = uniqueBrands.filter(b => b !== "OTHER BRANDS").sort();
+                uniqueBrands.push("OTHER BRANDS");
+
+                // 3. 뽑아낸 브랜드들로 버튼 만들기
+                uniqueBrands.forEach(brand => {
+                    subMenuContainer.innerHTML += `<div class="sub-menu-item" onclick="showItemList('BRAND', '${brand}')">${brand}</div>`;
+                });
+            } else if (type === 'CATEGORIES') {
+                const categories = ["OUTER", "TOP", "BOTTOM", "SHOES", "ACC"];
+                categories.forEach(cat => {
+                    subMenuContainer.innerHTML += `<div class="sub-menu-item" onclick="showItemList('CATEGORY', '${cat}')">${cat}</div>`;
+                });
+            }
+        }
+
+        function showItemList(filterType, filterValue) {
+            viewShopMain.style.display = 'none'; viewSubMenu.style.display = 'none'; viewItemList.style.display = 'flex';
+            currentListTitle.innerText = filterValue; 
+
+            if (filterType === 'ALL') btnBackToMenu.onclick = () => showShopMain();
+            else if (filterType === 'BRAND') btnBackToMenu.onclick = () => showSubMenu('BRANDS');
+            else if (filterType === 'CATEGORY') btnBackToMenu.onclick = () => showSubMenu('CATEGORIES');
+
+            let filteredItems = [];
+            products.forEach((product, index) => {
+                let match = false;
+                if (filterType === 'ALL') match = true;
+                else if (filterType === 'CATEGORY') { if (product.category === filterValue) match = true; }
+                else if (filterType === 'BRAND') {
+                    // ★ 클릭한 브랜드와 상품의 브랜드가 일치하는지 확인
+                    let itemBrand = product.brand || "OTHER BRANDS";
+                    if (itemBrand === filterValue) match = true;
+                }
+                if (match) filteredItems.push({ ...product, originalIndex: index });
+            });
+
+            let availableHtml = ''; let comingHtml = ''; let soldHtml = ''; let currentNumber = 1; 
+
+            filteredItems.forEach(item => {
+                let firstImageHtml = item.images && item.images.length > 0 ? `<img src="${item.images[0]}" alt="${item.name}">` : `<div class="grid-no-image">NO IMAGE</div>`;
+                let displayPriceHtml = formatPrice(item.price, item.discount);
+
+                if (item.status === "available") {
+                    let numStr = currentNumber < 10 ? '0' + currentNumber : currentNumber;
+                    availableHtml += `<div class="shop-grid-item" onclick="openModal(${item.originalIndex})"><div class="grid-image-wrapper">${firstImageHtml}</div><div class="grid-title">${numStr}. ${item.name}</div><div class="grid-price">${displayPriceHtml}</div></div>`;
+                    currentNumber++;
+                } else if (item.status === "coming") {
+                    comingHtml += `<div class="shop-grid-item" onclick="openModal(${item.originalIndex})"><div class="grid-image-wrapper">${firstImageHtml}</div><div class="grid-title">${item.name}</div><div class="grid-price">Coming Soon</div></div>`;
+                } else if (item.status === "sold") {
+                    soldHtml += `<div class="shop-grid-item sold-text" onclick="openModal(${item.originalIndex})"><div class="grid-image-wrapper sold-image-wrapper">${firstImageHtml}</div><div class="grid-title">Sold. ${item.name}</div><div class="grid-price">Sold Out</div></div>`;
+                }
+            });
+            itemListContainer.innerHTML = availableHtml + comingHtml + soldHtml;
+        }
+
+        function openModal(index) {
+            const item = products[index]; 
+            let displayPriceHtml = formatPrice(item.price, item.discount);
+            if (item.status === "sold") displayPriceHtml = "Sold.";
+            if (item.status === "coming") displayPriceHtml = "Coming Soon";
+            
+            document.getElementById('modal-info').innerHTML = `<strong>${item.name}</strong><br><br>${item.desc || '상세 설명을 준비 중입니다.'}<br><br>CONDITION: ${item.condition || 'N/A'}<br>PRICE: ${displayPriceHtml}`;
+            
+            const gallery = document.getElementById('modal-gallery'); gallery.innerHTML = ''; 
+            if (item.images && item.images.length > 0) { item.images.forEach(imgSrc => { gallery.innerHTML += `<img src="${imgSrc}" class="modal-image" alt="${item.name}">`; }); } 
+            else { gallery.innerHTML = `<div class="modal-image">IMAGE PREPARING</div>`; }
+
+            const buyBtnContainer = document.getElementById('buy-btn-container');
+            if (item.status === "sold") buyBtnContainer.innerHTML = `<span class="buy-btn disable-btn">Sold Out</span>`;
+            else if (item.status === "coming") buyBtnContainer.innerHTML = `<span class="buy-btn disable-btn">Coming Soon</span>`;
+            else buyBtnContainer.innerHTML = `<a href="${item.buyLink || '#'}" target="_blank" class="buy-btn">Buy</a>`;
+
+            body.classList.add('modal-open');
+        }
+
+        btnCloseModal.addEventListener('click', () => { body.classList.remove('modal-open'); });
+    </script>
+</body>
+</html>
