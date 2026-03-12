@@ -1,1 +1,18 @@
-[]
+{
+  "products": [
+    {
+      "id": "1773311477844",
+      "brand": "HELMUT LANG",
+      "name": "KIMJUYOUNG",
+      "category": "OUTER",
+      "price": "₩989,999,383",
+      "discount": "15",
+      "status": "coming",
+      "images": [
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773311476383_KakaoTalk_Photo_2023-12-13-22-12-34.jpeg"
+      ],
+      "createdAt": 1773311477844
+    }
+  ],
+  "archives": []
+}
