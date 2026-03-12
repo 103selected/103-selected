@@ -41,22 +41,6 @@
       "youtube": "https://youtu.be/2JQqjpx29SQ?si=hZFFjzHOrrud05jj",
       "images": [],
       "createdAt": 1773317462017
-    },
-    {
-      "id": "1773317368085",
-      "category": "LOOKBOOK",
-      "prefix": "01.",
-      "title": "NIGHT",
-      "desc": "우리는 여기에 있다.",
-      "youtube": "",
-      "images": [
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773317351436_IMG_2079.jpeg",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773317354478_IMG_2097.jpeg",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773317358675_IMG_2102.jpeg",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773317361752_IMG_2077.jpeg",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773317365028_IMG_2075.jpeg"
-      ],
-      "createdAt": 1773317368085
     }
   ],
   "contact": {}
