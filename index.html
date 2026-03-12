@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>103 SELECTED</title>
     <style>
-        /* --- 기존 오리지널 디자인 (수정 안함) --- */
+        /* --- 기존 오리지널 디자인 --- */
         body, html { margin: 0; padding: 0; width: 100%; height: 100vh; background-color: #ffffff; font-family: 'Helvetica', 'Apple SD Gothic Neo', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .logo-btn { position: absolute; display: flex; font-size: 6vw; font-weight: bold; color: #000000; cursor: pointer; z-index: 50; }
         .logo-btn:hover { opacity: 0.5; }
@@ -19,56 +19,48 @@
         .nav-item { font-size: 1vw; font-weight: bold; color: #000000; cursor: pointer; letter-spacing: 2px; transition: opacity 0.3s ease; }
         .nav-item:hover { opacity: 0.4; }
         
-        /* 스크롤 가능한 도화지 */
         .page-content { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: flex-start; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 20; overflow-y: auto; scrollbar-width: none; }
         .page-content::-webkit-scrollbar { display: none; } 
         
         .shop-wrapper, .archive-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 15vh; padding-bottom: 40vh; width: 75vw; margin: auto; }
 
-        /* SHOP 메인 메뉴 */
+        /* 화면 뷰어들 */
         #view-shop-main, #view-archive-main { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 10vh; margin-top: 5vh; }
         .main-item { font-size: 3vw; font-weight: bold; color: #000; cursor: pointer; letter-spacing: 5px; transition: all 0.3s ease; }
         .main-item:hover { color: #888; transform: scale(1.1); }
-        .new-arrival-text { color: #d32f2f; } /* 뉴 어라이블 포인트 컬러 */
+        .new-arrival-text { color: #d32f2f; } 
 
-        /* 서브 메뉴 & 리스트 */
-        #view-sub-menu { display: none; flex-direction: column; align-items: center; width: 100%; position: relative; }
-        #sub-menu-container { display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 8vh; }
+        #view-sub-menu, #view-item-list, #view-archive-list, #view-archive-detail { display: none; flex-direction: column; align-items: center; width: 100%; position: relative; }
+        #sub-menu-container { display: flex; flex-direction: column; align-items: center; width: 100%; }
         .sub-menu-item { font-size: 2.5vw; font-weight: bold; color: #000; cursor: pointer; letter-spacing: 4px; margin-bottom: 5vh; transition: all 0.3s ease; text-align: center; }
         .sub-menu-item:hover { color: #888; transform: scale(1.1); }
 
-        .btn-back { position: absolute; top: 0.2vh; left: 0; font-size: 1vw; font-weight: bold; color: #999; cursor: pointer; letter-spacing: 2px; transition: color 0.3s ease; z-index: 10; }
+        /* ★ BACK 버튼 통일화 시스템 (타이틀과 같은 줄을 공유하여 위치 오차 제거) ★ */
+        .view-header { position: relative; width: 100%; text-align: center; margin-bottom: 8vh; }
+        .btn-back { position: absolute; left: 0; top: 0; font-size: 1vw; font-weight: bold; color: #999; cursor: pointer; letter-spacing: 2px; transition: color 0.3s ease; z-index: 10; line-height: 1.5; }
         .btn-back:hover { color: #000; }
-
-        .current-list-title { font-size: 2vw; font-weight: bold; color: #000; letter-spacing: 5px; margin-bottom: 8vh; border-bottom: 2px solid #000; padding-bottom: 1vh; width: 100%; text-align: center; }
-
-        /* 그리드 아이템 (SHOP) */
-        #view-item-list { display: none; flex-direction: column; align-items: center; width: 100%; position: relative; }
-        #item-list-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8vh 4vw; width: 100%; }
+        .current-list-title { font-size: 2vw; font-weight: bold; color: #000; letter-spacing: 5px; border-bottom: 2px solid #000; padding-bottom: 1vh; display: inline-block; width: 100%; }
+        
+        /* 그리드 디자인 (SHOP, ARCHIVE 공통 적용) */
+        .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8vh 4vw; width: 100%; }
         .shop-grid-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.3s ease; }
         .shop-grid-item:hover { transform: translateY(-1vh); }
         .grid-image-wrapper { position: relative; width: 100%; aspect-ratio: 3 / 4; background-color: #f4f4f4; margin-bottom: 2vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         .grid-image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         .grid-no-image { font-size: 0.8vw; color: #aaa; letter-spacing: 2px; font-weight: bold; }
+        
+        /* ★ 상품 정보 3줄 (브랜드 - 제목 - 가격) 디자인 ★ */
+        .grid-brand { font-size: 1vw; font-weight: bold; color: #666; margin-bottom: 0.5vh; text-align: center; }
         .grid-title { font-size: 1.1vw; font-weight: bold; color: #000; text-align: center; letter-spacing: 1px; margin-bottom: 0.5vh; width: 90%; line-height: 1.4; }
-        .grid-price { font-size: 1vw; font-weight: normal; color: #666; letter-spacing: 1px; }
+        .grid-price { font-size: 1vw; font-weight: normal; color: #666; letter-spacing: 1px; text-align: center; }
 
-        .sold-text .grid-title, .sold-text .grid-price { color: #bbb; }
+        .sold-text .grid-brand, .sold-text .grid-title, .sold-text .grid-price { color: #bbb; }
         .sold-image-wrapper::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom right, transparent calc(50% - 0.5px), rgba(0,0,0,0.2) calc(50% - 0.5px), rgba(0,0,0,0.2) calc(50% + 0.5px), transparent calc(50% + 0.5px)), linear-gradient(to top right, transparent calc(50% - 0.5px), rgba(0,0,0,0.2) calc(50% - 0.5px), rgba(0,0,0,0.2) calc(50% + 0.5px), transparent calc(50% + 0.5px)); pointer-events: none; }
 
-        /* 아카이브 & 연락처 */
-        #view-archive-list { display: none; flex-direction: column; align-items: center; width: 100%; position: relative; }
-        #archive-content-container { display: flex; flex-direction: column; width: 100%; gap: 10vh; }
-        
-        /* 아카이브 리스트형 텍스트 스타일 */
-        .archive-list-item { font-size: 2vw; font-weight: bold; cursor: pointer; letter-spacing: 2px; margin-bottom: 3vh; transition: color 0.3s; text-align: left; width: 100%; border-bottom: 1px solid #eee; padding-bottom: 1vh; }
-        .archive-list-item:hover { color: #888; }
-        
         .contact-list { display: flex; flex-direction: column; align-items: flex-start; gap: 6vh; font-size: 1.8vw; font-weight: bold; color: #000; letter-spacing: 2px; line-height: 1.8; margin-top: 15vh; }
         .contact-list a { color: #000; text-decoration: none; border-bottom: 1px solid #000; padding-bottom: 2px; transition: color 0.3s, border-color 0.3s; }
         .contact-list a:hover { color: #888; border-color: #888; }
 
-        /* 모달 팝업 */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: all 0.5s ease; z-index: 200; }
         .modal-content { position: relative; width: 75vw; height: 85vh; display: flex; flex-direction: column; transform: translateY(20px); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
         .btn-close-modal { align-self: flex-end; font-size: 1.2vw; font-weight: bold; cursor: pointer; margin-bottom: 3vh; letter-spacing: 2px; transition: opacity 0.3s ease; }
@@ -83,7 +75,6 @@
         .buy-btn:hover { opacity: 0.4; }
         .disable-btn { color: #ccc; cursor: default; }
 
-        /* 상태 변화 애니메이션 */
         body.menu-mode .logo-btn { pointer-events: none; }
         body.menu-mode .split-left { transform: translateX(-10vw); opacity: 0; filter: blur(8px); }
         body.menu-mode .split-right { transform: translateX(10vw); opacity: 0; filter: blur(8px); }
@@ -101,9 +92,10 @@
         @media (max-width: 768px) {
             .logo-btn { font-size: 12vw; } .top-left-logo { top: 20px; left: 20px; font-size: 4vw; } .top-right-nav { top: 20px; right: 20px; gap: 4vw; }
             .nav-item { font-size: 3vw; } .menu-item { font-size: 8vw; } .shop-wrapper, .archive-wrapper { width: 90vw; padding-top: 10vh; }
-            #item-list-container { grid-template-columns: repeat(2, 1fr); gap: 4vh 3vw; } .grid-title { font-size: 3vw; width: 100%; }
-            .grid-price { font-size: 2.5vw; } .btn-back { font-size: 3vw; top: -3vh; } .current-list-title { font-size: 5vw; }
-            .main-item, .sub-menu-item { font-size: 6vw; } .archive-list-item { font-size: 4vw; }
+            .grid-container { grid-template-columns: repeat(2, 1fr); gap: 4vh 3vw; } 
+            .grid-brand, .grid-title, .grid-price { font-size: 3vw; width: 100%; }
+            .btn-back { font-size: 3vw; } .current-list-title { font-size: 5vw; }
+            .main-item, .sub-menu-item { font-size: 6vw; }
             .modal-content { width: 90vw; height: 80vh; } .modal-image { min-width: 80vw; height: 40vh; }
             .btn-close-modal { font-size: 4vw; } .modal-info { font-size: 3.5vw; } .buy-btn { font-size: 4.5vw; }
             .contact-list { font-size: 4vw; margin-top: 5vh; }
@@ -128,19 +120,24 @@
     <div class="page-content" id="page-shop">
         <div class="shop-wrapper">
             <div id="view-shop-main">
-                <div class="main-item new-arrival-text" onclick="showItemList('NEW_ARRIVAL', 'NEW ARRIVAL')">NEW ARRIVAL</div>
+                <div class="main-item new-arrival-text" onclick="showItemList('NEW', 'NEW')">NEW</div>
                 <div class="main-item" onclick="showItemList('ALL', 'ALL')">ALL</div>
                 <div class="main-item" onclick="showSubMenu('BRANDS')">BRANDS</div>
                 <div class="main-item" onclick="showSubMenu('CATEGORIES')">CATEGORIES</div>
             </div>
             <div id="view-sub-menu">
-                <div class="btn-back" onclick="showShopMain()">< BACK</div>
+                <div class="view-header">
+                    <div class="btn-back" onclick="showShopMain()">< BACK</div>
+                    <div class="current-list-title" style="border-bottom:none; color:transparent; pointer-events:none;">&nbsp;</div>
+                </div>
                 <div id="sub-menu-container"></div>
             </div>
             <div id="view-item-list">
-                <div class="btn-back" id="btn-back-to-menu">< BACK</div>
-                <div class="current-list-title" id="current-list-title">TITLE</div>
-                <div id="item-list-container"></div>
+                <div class="view-header">
+                    <div class="btn-back" id="btn-back-to-menu">< BACK</div>
+                    <div class="current-list-title" id="current-list-title">TITLE</div>
+                </div>
+                <div class="grid-container" id="item-list-container"></div>
             </div>
         </div>
     </div>
@@ -148,19 +145,25 @@
     <div class="page-content" id="page-archive">
         <div class="archive-wrapper">
             <div id="view-archive-main"></div>
-            
             <div id="view-archive-list">
-                <div class="btn-back" onclick="showArchiveMain()">< BACK</div>
-                <div class="current-list-title" id="archive-list-title">TITLE</div>
-                <div id="archive-content-container"></div>
+                <div class="view-header">
+                    <div class="btn-back" onclick="showArchiveMain()">< BACK</div>
+                    <div class="current-list-title" id="archive-list-title">TITLE</div>
+                </div>
+                <div class="grid-container" id="archive-grid-container"></div>
+            </div>
+            <div id="view-archive-detail">
+                <div class="view-header">
+                    <div class="btn-back" id="archive-detail-back">< BACK</div>
+                    <div class="current-list-title" id="archive-detail-title">TITLE</div>
+                </div>
+                <div id="archive-detail-content" style="width:100%;"></div>
             </div>
         </div>
     </div>
 
     <div class="page-content" id="page-contact">
-        <div class="contact-list" id="contact-container">
-            <div>Mail: 불러오는 중...</div>
-        </div>
+        <div class="contact-list" id="contact-container"><div>Mail: 불러오는 중...</div></div>
     </div>
 
     <div class="modal-overlay" id="modal-overlay">
@@ -207,19 +210,19 @@
             `;
         }
 
+        // ★ 가격 포맷 변경 (원래가격 — 할인가격 (할인율)) ★
         function formatPrice(originalStr, discountStr) {
             if (!discountStr || discountStr.trim() === "" || parseInt(discountStr) === 0) return originalStr;
             const origNum = parseInt(originalStr.replace(/[^0-9]/g, ''));
             const finalStr = '₩' + Math.floor(origNum * ((100 - parseInt(discountStr)) / 100)).toLocaleString('ko-KR');
-            return `<span style="text-decoration:line-through; color:#aaa; font-size:0.8em; margin-right:5px;">${originalStr}</span><span style="color:#d32f2f; font-weight:bold; margin-right:5px;">(${discountStr}%)</span><span style="color:#000;">${finalStr}</span>`;
+            return `<span style="text-decoration:line-through; color:#aaa;">${originalStr}</span> — <span style="font-weight:bold; color:#000;">${finalStr}</span> <span style="color:#d32f2f; font-weight:bold;">(${discountStr}%)</span>`;
         }
 
-        // 유튜브 주소 변환기
-        function getYouTubeEmbedUrl(url) {
+        function getYouTubeVideoId(url) {
             let videoId = '';
             if (url.includes('v=')) videoId = url.split('v=')[1].split('&')[0];
             else if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
-            return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+            return videoId;
         }
 
         const body = document.body;
@@ -257,7 +260,7 @@
             document.getElementById('view-shop-main').style.display = 'none'; document.getElementById('view-sub-menu').style.display = 'none'; document.getElementById('view-item-list').style.display = 'flex';
             document.getElementById('current-list-title').innerText = filterValue; 
 
-            if (filterType === 'ALL' || filterType === 'NEW_ARRIVAL') document.getElementById('btn-back-to-menu').onclick = () => showShopMain();
+            if (filterType === 'ALL' || filterType === 'NEW') document.getElementById('btn-back-to-menu').onclick = () => showShopMain();
             else if (filterType === 'BRAND') document.getElementById('btn-back-to-menu').onclick = () => showSubMenu('BRANDS');
             else if (filterType === 'CATEGORY') document.getElementById('btn-back-to-menu').onclick = () => showSubMenu('CATEGORIES');
 
@@ -267,8 +270,7 @@
                 let itemBrand = product.brand || "UNKNOWN";
 
                 if (filterType === 'ALL') match = true;
-                else if (filterType === 'NEW_ARRIVAL') {
-                    // ★ 지정된 날짜(newDays)가 안 지났으면 보여줌
+                else if (filterType === 'NEW') {
                     if (product.newDays && parseInt(product.newDays) > 0) {
                         const ageInMs = Date.now() - product.createdAt;
                         const maxAgeMs = parseInt(product.newDays) * 24 * 60 * 60 * 1000;
@@ -289,64 +291,97 @@
                 let priceHtml = formatPrice(item.price, item.discount);
                 let bName = item.brand || "UNKNOWN";
 
+                // ★ 상품정보 3줄 디자인 적용 ★
+                let cardInner = `
+                    <div class="grid-image-wrapper">${firstImg}</div>
+                    <div class="grid-brand">[${bName}]</div>
+                    <div class="grid-title">${item.status === 'available' ? (currentNumber < 10 ? '0'+currentNumber : currentNumber) + '.' : (item.status === 'coming' ? '' : 'Sold.')} ${item.name}</div>
+                    <div class="grid-price">${item.status === 'available' ? priceHtml : (item.status === 'coming' ? 'Coming Soon' : 'Sold Out')}</div>
+                `;
+
                 if (item.status === "available") {
-                    let numStr = currentNumber < 10 ? '0' + currentNumber : currentNumber;
-                    availableHtml += `<div class="shop-grid-item" onclick="openModal(${item.originalIndex})"><div class="grid-image-wrapper">${firstImg}</div><div class="grid-title">[${bName}] ${numStr}. ${item.name}</div><div class="grid-price">${priceHtml}</div></div>`;
+                    availableHtml += `<div class="shop-grid-item" onclick="openModal(${item.originalIndex})">${cardInner}</div>`;
                     currentNumber++;
                 } else if (item.status === "coming") {
-                    comingHtml += `<div class="shop-grid-item" onclick="openModal(${item.originalIndex})"><div class="grid-image-wrapper">${firstImg}</div><div class="grid-title">[${bName}] ${item.name}</div><div class="grid-price">Coming Soon</div></div>`;
+                    comingHtml += `<div class="shop-grid-item" onclick="openModal(${item.originalIndex})">${cardInner}</div>`;
                 } else if (item.status === "sold") {
-                    soldHtml += `<div class="shop-grid-item sold-text" onclick="openModal(${item.originalIndex})"><div class="grid-image-wrapper sold-image-wrapper">${firstImg}</div><div class="grid-title">[${bName}] Sold. ${item.name}</div><div class="grid-price">Sold Out</div></div>`;
+                    soldHtml += `<div class="shop-grid-item sold-text" onclick="openModal(${item.originalIndex})">${cardInner}</div>`;
                 }
             });
             document.getElementById('item-list-container').innerHTML = availableHtml + comingHtml + soldHtml;
         }
 
-        // ====== ARCHIVE / VIDEO 로직 ======
-        function showArchiveMain() { document.getElementById('view-archive-list').style.display = 'none'; document.getElementById('view-archive-main').style.display = 'flex'; }
+        // ====== ARCHIVE / VIDEO 마스터-디테일 로직 ======
+        function showArchiveMain() { 
+            document.getElementById('view-archive-list').style.display = 'none'; 
+            document.getElementById('view-archive-detail').style.display = 'none'; 
+            document.getElementById('view-archive-main').style.display = 'flex'; 
+        }
         
         function generateArchiveMenu() {
             showArchiveMain();
             const mainContainer = document.getElementById('view-archive-main'); mainContainer.innerHTML = '';
-            
-            // 등록된 아카이브 카테고리들(VIDEO, LOOKBOOK 등)을 알아서 스캔해서 메뉴 만들기
             let uniqueCategories = [...new Set(archives.map(a => a.category || "LOOKBOOK"))];
             if (uniqueCategories.length === 0) { mainContainer.innerHTML = '<div class="main-item">발행된 콘텐츠가 없습니다.</div>'; return; }
-            
-            uniqueCategories.forEach(cat => {
-                mainContainer.innerHTML += `<div class="main-item" onclick="showArchiveList('${cat}')">${cat}</div>`;
-            });
+            uniqueCategories.forEach(cat => { mainContainer.innerHTML += `<div class="main-item" onclick="showArchiveList('${cat}')">${cat}</div>`; });
         }
 
         function showArchiveList(category) {
-            document.getElementById('view-archive-main').style.display = 'none'; document.getElementById('view-archive-list').style.display = 'flex';
+            document.getElementById('view-archive-main').style.display = 'none'; 
+            document.getElementById('view-archive-detail').style.display = 'none';
+            document.getElementById('view-archive-list').style.display = 'flex';
             document.getElementById('archive-list-title').innerText = category;
             
-            const container = document.getElementById('archive-content-container'); container.innerHTML = '';
+            const container = document.getElementById('archive-grid-container'); container.innerHTML = '';
             let filtered = archives.filter(a => (a.category || "LOOKBOOK") === category);
             
             filtered.forEach((item, index) => {
                 let prefixText = item.prefix ? `${item.prefix} ` : '';
+                let firstImg = item.images && item.images.length > 0 ? `<img src="${item.images[0]}">` : `<div class="grid-no-image">NO IMAGE</div>`;
                 
-                // ★ 유튜브 링크가 있으면 iframe 영상 삽입, 없으면 사진 띄우기
-                let mediaHtml = '';
-                if (item.youtube && item.youtube.trim() !== '') {
-                    const embedUrl = getYouTubeEmbedUrl(item.youtube);
-                    if (embedUrl) {
-                        mediaHtml = `<iframe width="100%" height="450" src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="margin-top:20px;"></iframe>`;
-                    }
-                } else if (item.images && item.images.length > 0) {
-                    item.images.forEach(img => { mediaHtml += `<img src="${img}" style="width:100%; margin-top:20px; background:#f4f4f4;">`; });
+                // 유튜브 링크만 있고 사진이 없으면, 자동으로 유튜브 썸네일 가져오기
+                if (item.youtube && (!item.images || item.images.length === 0)) {
+                    let videoId = getYouTubeVideoId(item.youtube);
+                    if (videoId) firstImg = `<img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg">`;
                 }
 
                 container.innerHTML += `
-                    <div style="margin-bottom:10vh; width:100%; text-align:center;">
-                        <div style="font-size:2vw; font-weight:bold; letter-spacing:2px;">${prefixText}${item.title}</div>
-                        ${item.desc ? `<div style="font-size:1.2vw; color:#666; margin-top:1vh; white-space:pre-wrap;">${item.desc}</div>` : ''}
-                        ${mediaHtml}
+                    <div class="shop-grid-item" onclick="openArchiveDetail('${item.id}', '${category}')">
+                        <div class="grid-image-wrapper">${firstImg}</div>
+                        <div class="grid-title">${prefixText}${item.title}</div>
                     </div>
                 `;
             });
+        }
+
+        function openArchiveDetail(id, category) {
+            document.getElementById('view-archive-list').style.display = 'none';
+            document.getElementById('view-archive-detail').style.display = 'flex';
+            
+            const item = archives.find(a => a.id === id);
+            let prefixText = item.prefix ? `${item.prefix} ` : '';
+            
+            document.getElementById('archive-detail-title').innerText = category;
+            document.getElementById('archive-detail-back').onclick = () => showArchiveList(category);
+            
+            let mediaHtml = '';
+            if (item.youtube && item.youtube.trim() !== '') {
+                const videoId = getYouTubeVideoId(item.youtube);
+                if (videoId) {
+                    // ★ 유튜브 영상 크기를 엄청나게 키웠습니다 (가로폭 100%, 최대 높이 제한)
+                    mediaHtml = `<iframe width="100%" height="800" style="max-height: 70vh;" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                }
+            } else if (item.images && item.images.length > 0) {
+                item.images.forEach(img => { mediaHtml += `<img src="${img}" style="width:100%; margin-top:20px; background:#f4f4f4;">`; });
+            }
+
+            document.getElementById('archive-detail-content').innerHTML = `
+                <div style="margin-bottom:10vh; width:100%; text-align:center;">
+                    <div style="font-size:2vw; font-weight:bold; letter-spacing:2px;">${prefixText}${item.title}</div>
+                    ${item.desc ? `<div style="font-size:1.2vw; color:#666; margin-top:1vh; margin-bottom: 4vh; white-space:pre-wrap;">${item.desc}</div>` : ''}
+                    ${mediaHtml}
+                </div>
+            `;
         }
 
         // ====== 공통 모달(팝업) 로직 ======
