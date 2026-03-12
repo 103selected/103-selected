@@ -45,14 +45,15 @@
         .btn-edit { padding: 8px 12px; border: 1px solid #000; background: #fff; color: #000; cursor: pointer; font-size: 12px; margin-left: 10px; }
         .btn-delete { padding: 8px 12px; border: none; background: #ff4444; color: #fff; cursor: pointer; font-size: 12px; }
 
-        /* ★ 사진 순서 변경(썸네일 지정) UI 디자인 ★ */
+        /* 사진 순서 변경(썸네일 지정) UI 디자인 */
         .preview-container { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
-        .preview-box { position: relative; width: 100px; height: 130px; border: 1px solid #ccc; background: #fff; display: flex; flex-direction: column; border-radius: 5px; overflow: hidden; }
-        .preview-box img { width: 100%; height: 100px; object-fit: cover; }
-        .preview-actions { display: flex; height: 30px; }
-        .preview-actions button { flex: 1; border: none; background: #eee; cursor: pointer; font-size: 12px; border-top: 1px solid #ccc; border-right: 1px solid #ccc; font-weight: bold; }
+        .preview-box { position: relative; width: 120px; height: 160px; border: 1px solid #ccc; background: #fff; display: flex; flex-direction: column; border-radius: 5px; overflow: hidden; }
+        .preview-box img { width: 100%; height: 120px; object-fit: cover; }
+        .preview-actions { display: flex; height: 40px; }
+        .preview-actions button { flex: 1; border: none; background: #eee; cursor: pointer; font-size: 14px; border-top: 1px solid #ccc; border-right: 1px solid #ccc; font-weight: bold; }
+        .preview-actions button:hover { background: #ddd; }
         .preview-actions button:last-child { border-right: none; background: #ff4444; color: #fff; }
-        .thumb-badge { position: absolute; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.7); color: #fff; font-size: 10px; text-align: center; padding: 4px 0; font-weight: bold; pointer-events: none; }
+        .thumb-badge { position: absolute; top: 0; left: 0; width: 100%; background: #e52d27; color: #fff; font-size: 12px; text-align: center; padding: 5px 0; font-weight: bold; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -89,18 +90,17 @@
                 <div class="form-group"><label>판매 상태</label><select id="p-status"><option value="available">판매중</option><option value="coming">커밍순</option><option value="sold">품절</option></select></div>
                 <div class="form-group"><label>원래 가격</label><input type="text" id="p-price" placeholder="숫자만 입력"></div>
                 <div class="form-group"><label>할인율 (%)</label><input type="number" id="p-discount" placeholder="예: 15 (없으면 비워두세요)"></div>
-                
                 <div class="form-group"><label style="color:#2196F3; font-weight:bold;">NEW 노출 기간 (일)</label><input type="number" id="p-new-days" placeholder="예: 3 (비워두면 일반 상품)"></div>
                 <div class="form-group"><label>구매 링크 (URL)</label><input type="text" id="p-link" placeholder="예: https://fruitsfamily.com/..."></div>
                 
                 <div class="form-group full">
-                    <label id="p-image-label" style="font-weight:bold; color:#e52d27;">상품 사진 (◀ ▶ 버튼으로 순서를 바꾸면 첫 번째 사진이 썸네일이 됩니다)</label>
+                    <label id="p-image-label" style="font-weight:bold; color:#e52d27;">📸 상품 사진 (여러 장 업로드 후 ◀ ▶ 버튼으로 순서 변경 / 삭제 가능)</label>
                     <div id="shop-image-preview" class="preview-container"></div>
                     <input type="file" id="p-image" class="file-input-wrapper" style="margin-top:10px;" accept="image/*" multiple>
                 </div>
                 <button id="btn-add-product" class="submit-btn">상품 업로드</button>
             </div>
-            <h2>등록된 상품 목록 (▲▼ 버튼으로 순서 변경)</h2>
+            <h2>등록된 상품 목록 (▲▼ 버튼으로 리스트 순서도 바꿀 수 있습니다)</h2>
             <div class="item-list" id="product-list-container"></div>
         </div>
 
@@ -116,20 +116,20 @@
                 <div class="form-group full"><label style="color:#e52d27; font-weight:bold;">유튜브 주소 (VIDEO일 경우 필수)</label><input type="text" id="a-youtube" placeholder="예: https://www.youtube.com/watch?v=..."></div>
                 <div class="form-group full"><label>테마 설명 (비워두면 사진/영상만)</label><textarea id="a-desc" rows="3"></textarea></div>
                 <div class="form-group full">
-                    <label style="font-weight:bold; color:#e52d27;">사진 (◀ ▶ 버튼으로 순서 변경 가능)</label>
+                    <label style="font-weight:bold; color:#e52d27;">📸 사진 (여러 장 업로드 후 ◀ ▶ 버튼으로 순서 변경 / 삭제 가능)</label>
                     <div id="archive-image-preview" class="preview-container"></div>
                     <input type="file" id="a-images" class="file-input-wrapper" style="margin-top:10px;" accept="image/*" multiple>
                 </div>
                 <button id="btn-add-archive" class="submit-btn">콘텐츠 업로드</button>
             </div>
-            <h2>발행된 아카이브 목록 (▲▼ 버튼으로 순서 변경)</h2>
+            <h2>발행된 아카이브 목록</h2>
             <div class="item-list" id="archive-list-container"></div>
         </div>
 
         <div id="tab-contact" class="tab-content">
             <div class="add-form">
                 <h2>CONTACT 정보 수정</h2>
-                <div class="form-group full"><label>이메일 주소 (링크 없이 텍스트만 뜹니다)</label><input type="text" id="c-email" placeholder="예: 103selected@gmail.com"></div>
+                <div class="form-group full"><label>이메일 주소 (링크 없이 텍스트만 노출됩니다)</label><input type="text" id="c-email" placeholder="예: 103selected@gmail.com"></div>
                 <div class="form-group full"><label>인스타그램 프로필 주소</label><input type="text" id="c-insta" placeholder="예: https://instagram.com/103selected"></div>
                 <div class="form-group full"><label>후루츠패밀리 상점 주소</label><input type="text" id="c-fruits" placeholder="예: https://fruitsfamily.com/seller/..."></div>
                 <button id="btn-save-contact" class="submit-btn">연락처 저장 및 사이트 반영</button>
@@ -160,7 +160,7 @@
                 dbData = Array.isArray(parsed) && parsed.length === 0 ? { products: [], archives: [], contact: {} } : parsed;
                 if(!dbData.products) dbData.products = []; if(!dbData.archives) dbData.archives = []; if(!dbData.contact) dbData.contact = {};
                 
-                document.getElementById('c-email').value = dbData.contact.email || "103selected@gmail.com"; 
+                document.getElementById('c-email').value = (dbData.contact.email && dbData.contact.email !== "undefined") ? dbData.contact.email : "103selected@gmail.com"; 
                 document.getElementById('c-insta').value = dbData.contact.insta || "https://instagram.com/103selected"; 
                 document.getElementById('c-fruits').value = dbData.contact.fruits || "https://fruitsfamily.com/seller/u1ap/103selected";
                 return true;
@@ -199,11 +199,11 @@
         if(GITHUB_TOKEN) { fetchDatabase().then(success => { if(success) { document.getElementById('login-screen').style.display = 'none'; document.getElementById('dashboard-screen').style.display = 'block'; renderLists(); } else { localStorage.removeItem('github_token'); } }); }
         document.getElementById('btn-logout').addEventListener('click', () => { localStorage.removeItem('github_token'); location.reload(); });
 
-        // ★ 이미지 미리보기 및 순서 이동(썸네일 지정) 로직 ★
+        // 사진 썸네일 표시 & 순서 변경 기능
         function renderShopImagesPreview() {
             const box = document.getElementById('shop-image-preview'); box.innerHTML = '';
             activeShopImages.forEach((url, i) => {
-                let badge = i === 0 ? `<div class="thumb-badge">MAIN (썸네일)</div>` : '';
+                let badge = i === 0 ? `<div class="thumb-badge">★ MAIN (썸네일)</div>` : '';
                 box.innerHTML += `
                     <div class="preview-box">
                         ${badge}
