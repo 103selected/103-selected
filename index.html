@@ -5,57 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>103 SELECTED</title>
     <style>
-        /* ========================================================
-           ★ 시스템 규격 복구: 화면을 꽉 채우는 유연한 단위(vw)로 원상복구 ★
-           ======================================================== */
+        /* --- 1. 기본 시스템 & 화면 꽉 채우는 규격 --- */
         :root {
-            --font-huge: 3.5vw;     /* 메인 메뉴 (NEW, ALL, 룩북 등) - 원래의 거대한 크기 */
-            --font-large: 2.5vw;    /* 서브 메뉴 (브랜드명, 카테고리명) 및 헤더 타이틀 */
-            --font-medium: 1.2vw;   /* 상품 브랜드, 제목 등 */
-            --font-small: 1vw;      /* 가격, BACK 버튼 등 */
+            --font-huge: 3.5vw;     /* 메인 메뉴 */
+            --font-large: 2.5vw;    /* 서브 메뉴, 헤더, 상세 제목 */
+            --font-medium: 1.2vw;   /* 상품 브랜드, 설명 등 */
+            --font-small: 1vw;      /* 가격, BACK 등 */
             --font-tiny: 0.8vw;     /* NEW 뱃지 */
             
-            --gap-menu: 10vh;       /* 메뉴 간의 세로 간격 */
-            --gap-list: 6vh;        /* 리스트 간의 세로 간격 */
+            --gap-menu: 10vh;       /* 메뉴 간 세로 간격 */
+            --gap-list: 6vh;        /* 리스트 간 세로 간격 */
         }
-
-        /* 스마트폰용 규격 */
         @media (max-width: 768px) {
-            :root {
-                --font-huge: 8vw;
-                --font-large: 6vw;
-                --font-medium: 3.5vw;
-                --font-small: 3vw;
-                --font-tiny: 2.5vw;
-                --gap-menu: 8vh;
-                --gap-list: 4vh;
-            }
+            :root { --font-huge: 8vw; --font-large: 6vw; --font-medium: 3.5vw; --font-small: 3vw; --font-tiny: 2.5vw; --gap-menu: 8vh; --gap-list: 4vh; }
         }
 
-        /* --- 1. 기본 세팅 --- */
         body, html { margin: 0; padding: 0; width: 100%; height: 100vh; background-color: #ffffff; font-family: 'Helvetica', 'Apple SD Gothic Neo', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         
         .logo-btn { position: absolute; display: flex; font-size: 6vw; font-weight: bold; color: #000000; cursor: pointer; z-index: 50; }
         .logo-btn:hover { opacity: 0.5; }
         .split-left, .split-right { transition: all 1s cubic-bezier(0.25, 1, 0.5, 1); }
-        
         .top-left-logo { position: absolute; top: 40px; left: 50px; font-size: 1.5vw; font-weight: bold; color: #000000; letter-spacing: 1px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100; cursor: pointer; }
         .top-left-logo:hover { opacity: 0.5; }
-        
         .center-menu { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 7vh; opacity: 0; transform: translateY(20px); pointer-events: none; transition: all 0.3s ease; z-index: 40; }
         .menu-item { font-size: 3.5vw; font-weight: bold; color: #000000; cursor: pointer; letter-spacing: 4px; transition: transform 0.3s ease; }
         .menu-item:hover { transform: scale(1.2); }
-        
         .top-right-nav { position: absolute; top: 40px; right: 50px; display: flex; gap: 2.5vw; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100; }
         .nav-item { font-size: 1vw; font-weight: bold; color: #000000; cursor: pointer; letter-spacing: 2px; transition: opacity 0.3s ease; }
         .nav-item:hover { opacity: 0.4; }
         
-        /* 공통 도화지 */
         .page-content { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 20; overflow-y: auto; scrollbar-width: none; }
         .page-content::-webkit-scrollbar { display: none; } 
 
-        .content-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 10vh; padding-bottom: 20vh; width: 80%; max-width: 1200px; margin: 0 auto; min-height: 100%; }
-        #page-contact { justify-content: center; } 
+        .content-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 10vh; padding-bottom: 20vh; width: 75vw; margin: 0 auto; min-height: 100%; }
 
         /* --- 2. 화면 정중앙 뷰 --- */
         .center-view { width: 100%; flex-grow: 1; display: none; flex-direction: column; justify-content: center; align-items: center; margin-top: -5vh; }
@@ -103,8 +85,12 @@
         .archive-list-item { font-size: var(--font-large); font-weight: bold; color: #000; cursor: pointer; letter-spacing: 2px; text-align: center; width: 100%; transition: all 0.3s ease; }
         .archive-list-item:hover { color: #888; transform: scale(1.05); }
         
+        /* ★ 아카이브 상세화면 전용 제목 폰트 (크기 축소) ★ */
+        .archive-detail-title-text { font-size: var(--font-large); font-weight: bold; letter-spacing: 2px; margin-bottom: 4vh; }
+
         /* CONTACT */
-        .contact-list { display: flex; flex-direction: column; align-items: center; gap: 8vh; font-size: var(--font-huge); font-weight: bold; color: #000; letter-spacing: 2px; line-height: 1.8; text-align: center; transform: translateY(-5vh); }
+        #page-contact { justify-content: center; }
+        .contact-list { display: flex; flex-direction: column; align-items: center; gap: 8vh; font-size: var(--font-large); font-weight: bold; color: #000; letter-spacing: 2px; line-height: 1.8; text-align: center; transform: translateY(-5vh); }
         .contact-list a { color: #000; text-decoration: none; border-bottom: 2px solid #000; padding-bottom: 4px; transition: color 0.3s, border-color 0.3s; }
         .contact-list a:hover { color: #888; border-color: #888; }
         .mail-text { font-weight: bold; border-bottom: none !important; cursor: default; }
@@ -143,7 +129,7 @@
             .logo-btn { font-size: 12vw; } .top-left-logo { top: 20px; left: 20px; font-size: 4vw; } .top-right-nav { top: 20px; right: 20px; gap: 4vw; }
             .nav-item { font-size: 3vw; } .menu-item { font-size: 8vw; } 
             .content-wrapper { width: 90vw; padding-top: 8vh; }
-            .view-header { margin-bottom: 6vh; padding-bottom: 1.5vh; }
+            .view-header { margin-bottom: 6vh; padding-bottom: 1.5vh; min-height: 4vh; }
             .grid-container { grid-template-columns: repeat(2, 1fr); gap: 4vh 3vw; } 
             .modal-content { width: 90vw; height: 80vh; } .modal-image { min-width: 80vw; height: 40vh; }
         }
@@ -269,14 +255,14 @@
             return `<span style="color:#aaa;">${originalStr}</span> &nbsp;&nbsp; <span style="font-weight:bold; color:#000;">${finalStr}</span> <span style="color:#d32f2f; font-weight:bold;">(${discountStr}%)</span>`;
         }
 
-        // 유튜브 링크 에러 완벽 차단
         function getYouTubeVideoId(url) {
             try {
                 if (!url) return '';
                 let videoId = '';
-                if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
-                else if (url.includes('v=')) videoId = url.split('v=')[1].split('&')[0];
-                else if (url.includes('embed/')) videoId = url.split('embed/')[1].split('?')[0];
+                if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split(/[?#]/)[0];
+                else if (url.includes('v=')) videoId = url.split('v=')[1].split(/[&?#]/)[0];
+                else if (url.includes('embed/')) videoId = url.split('embed/')[1].split(/[?#]/)[0];
+                else if (url.includes('shorts/')) videoId = url.split('shorts/')[1].split(/[?#]/)[0];
                 return videoId;
             } catch(e) { return ''; }
         }
@@ -293,7 +279,6 @@
             if(pageId === 'archive') changeArchiveView('main'); 
         }
 
-        // ====== SHOP 로직 ======
         function changeShopView(viewName) {
             document.getElementById('view-shop-main').classList.remove('active'); document.getElementById('view-shop-sub').classList.remove('active'); document.getElementById('view-shop-list').classList.remove('active');
             document.getElementById('view-shop-' + viewName).classList.add('active');
@@ -337,7 +322,7 @@
                 let firstImg = item.images && item.images.length > 0 ? `<img src="${item.images[0]}">` : `<div class="grid-no-image">NO IMAGE</div>`;
                 let priceHtml = formatPrice(item.price, item.discount); let bName = item.brand || "UNKNOWN";
                 let isNew = false; if (item.newDays && parseInt(item.newDays) > 0) { const ageInMs = Date.now() - item.createdAt; if (ageInMs <= parseInt(item.newDays) * 24 * 60 * 60 * 1000) isNew = true; }
-                let newTag = isNew ? `<span style="color:#d32f2f; font-size:var(--font-tiny); font-weight:bold; margin-right:6px; vertical-align:middle;">NEW</span>` : '';
+                let newTag = isNew ? `<span style="color:#d32f2f; font-size:var(--font-tiny); font-weight:bold; margin-right:6px; vertical-align:baseline;">NEW</span>` : '';
                 let numStr = currentNumber < 10 ? '0' + currentNumber : currentNumber;
                 let cardInner = `<div class="grid-image-wrapper">${firstImg}</div><div class="grid-brand">[${bName}]</div><div class="grid-title-line">${newTag}${item.status === 'available' ? numStr + '.' : (item.status === 'coming' ? '' : 'Sold.')} ${item.name}</div><div class="grid-price">${item.status === 'available' ? priceHtml : (item.status === 'coming' ? 'Coming Soon' : 'Sold Out')}</div>`;
                 if (item.status === "available") { availableHtml += `<div class="shop-grid-item" onclick="openModal(${item.originalIndex})">${cardInner}</div>`; currentNumber++; } 
@@ -373,7 +358,7 @@
             });
         }
 
-        // ★ 아카이브 상세: 사진과 영상이 관리자가 섞은 순서대로 나오는 레이아웃 ★
+        // ★ 에러 없이 유튜브 및 사진을 모두 출력하는 핵심 로직 ★
         function openArchiveDetail(id, category) {
             changeArchiveView('detail');
             const item = archives.find(a => a.id === id);
@@ -385,17 +370,30 @@
             let mediaHtml = '';
             let currentImageGroup = [];
 
+            // 사진을 2열로 묶어서 그리는 함수
             function flushImages() {
                 if (currentImageGroup.length > 0) {
-                    mediaHtml += `<div style="column-count: 3; column-gap: 4vw; margin-bottom: 8vh; width: 100%;">`;
+                    mediaHtml += `<div style="column-count: 2; column-gap: 4vw; margin-bottom: 8vh; width: 100%;">`;
                     currentImageGroup.forEach(img => { mediaHtml += `<img src="${img}" style="width: 100%; display: block; margin-bottom: 4vw; background: #f4f4f4;">`; });
                     mediaHtml += `</div>`;
                     currentImageGroup = [];
                 }
             }
 
+            // 1. 기존의 단일 유튜브 칸(item.youtube)에 있던 영상을 가장 먼저 통합합니다.
+            let allMedia = [];
+            if (item.youtube && item.youtube.trim() !== '') {
+                allMedia.push(item.youtube);
+            }
+            
+            // 2. 새롭게 추가한 다중 미디어 배열(item.images)을 합칩니다.
             if (item.images && item.images.length > 0) {
-                item.images.forEach(mediaUrl => {
+                allMedia = allMedia.concat(item.images);
+            }
+
+            // 3. 배열을 돌면서 영상인지 사진인지 판별해서 화면에 그립니다.
+            if (allMedia.length > 0) {
+                allMedia.forEach(mediaUrl => {
                     let vid = getYouTubeVideoId(mediaUrl);
                     if (vid) {
                         flushImages(); 
@@ -409,7 +407,7 @@
 
             document.getElementById('archive-detail-content').innerHTML = `
                 <div style="margin-bottom:10vh; width:100%; text-align:center;">
-                    <div style="font-size:var(--font-huge); font-weight:bold; letter-spacing:2px; margin-bottom:4vh;">${prefixText}${item.title}</div>
+                    <div class="archive-detail-title-text">${prefixText}${item.title}</div>
                     ${item.desc ? `<div style="font-size:var(--font-medium); color:#666; margin-bottom:8vh; white-space:pre-wrap;">${item.desc}</div>` : ''}
                     ${mediaHtml}
                 </div>
