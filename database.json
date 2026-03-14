@@ -2,21 +2,6 @@
   "products": [],
   "archives": [
     {
-      "id": "1773317509968",
-      "category": "FLEA MARKET",
-      "prefix": "01.",
-      "title": "WEAREHERE",
-      "desc": "신흥시장",
-      "youtube": "",
-      "images": [
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773317497831_IMG_1959.jpeg",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773317500803_IMG_1955.jpeg",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773317503873_IMG_1954.jpeg",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773317506784_IMG_1949.jpeg"
-      ],
-      "createdAt": 1773317509968
-    },
-    {
       "id": "1773317462017",
       "category": "VIDEO",
       "prefix": "01.",
