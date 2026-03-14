@@ -1,5 +1,23 @@
 {
-  "products": [],
+  "products": [
+    {
+      "id": "1773477074700",
+      "brand": "SUNFLOWER",
+      "name": "Sunflower navy wool coat",
+      "fabric": "",
+      "category": "OUTER",
+      "price": "₩389,000",
+      "discount": "",
+      "buyLink": "",
+      "newDays": "",
+      "status": "available",
+      "images": [
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773477071036_IMG_1619.jpeg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773477072759_IMG_1620.jpeg"
+      ],
+      "createdAt": 1773477074702
+    }
+  ],
   "archives": [
     {
       "id": "1773476922941",
