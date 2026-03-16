@@ -22,6 +22,25 @@
       "sizeDesc": "Shoulder: 47cm\nChest: 57cm\nSleeve: 58cn\nLength: 114cm"
     }
   ],
-  "archives": [],
+  "archives": [
+    {
+      "id": "1773672398555",
+      "category": "LOOKBOOK",
+      "prefix": "01.",
+      "title": "Test ver. 1",
+      "desc": "0100101011101101010100011010101010101111010101",
+      "youtube": "",
+      "mediaOrder": "video-first",
+      "images": [
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773672382180_R0006072.JPG",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773672384634_R0006078.JPG",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773672386696_R0006076.JPG",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773672388997_R0006073.JPG",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773672392096_R0006060.JPG",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773672394982_R0006037.JPG"
+      ],
+      "createdAt": 1773672398555
+    }
+  ],
   "contact": {}
 }
