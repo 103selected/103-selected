@@ -22,24 +22,6 @@
       "sizeDesc": "Shoulder: 47cm\nChest: 57cm\nSleeve: 58cn\nLength: 114cm"
     },
     {
-      "id": "1773653824068",
-      "brand": "SUNFLOWER",
-      "name": "Navy Wool Coat",
-      "desc": "Size: 48\n\nShoulder: 51cm\nChest: 56cm\nSleeve: 63cm\nLength: 115cm",
-      "category": "OUTER",
-      "price": "₩389,000",
-      "discount": "",
-      "buyLink": "https://fruitsfamily.com/product/4q3oi/sunflower-navy-wool-coat Sunflower Navy Wool Coat on FruitsFamily",
-      "newDays": "",
-      "status": "available",
-      "images": [
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773653816870_R0006098.JPG",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773653819360_R0006100.JPG",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773653821823_R0006104.JPG"
-      ],
-      "createdAt": 1773653824068
-    },
-    {
       "id": "1773653750233",
       "brand": "CDG",
       "name": "Nylon Coach Jacket",
