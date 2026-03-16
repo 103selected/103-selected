@@ -4,7 +4,7 @@
       "id": "1773654560024",
       "brand": "HELMUT LANG",
       "name": "Parachute Bondage Parka",
-      "desc": "Size: S\n\nShoulder: 47cm\nChest: 57cm\nSleeve: 58cn\nLength: 114cm",
+      "desc": "",
       "category": "OUTER",
       "price": "₩329,000",
       "discount": "",
@@ -16,7 +16,10 @@
         "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773654554526_R0006195.JPG",
         "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773654556946_R0006194.JPG"
       ],
-      "createdAt": 1773654560024
+      "createdAt": 1773654560024,
+      "condition": "",
+      "size": "S",
+      "sizeDesc": "Shoulder: 47cm\nChest: 57cm\nSleeve: 58cn\nLength: 114cm"
     },
     {
       "id": "1773654405532",
