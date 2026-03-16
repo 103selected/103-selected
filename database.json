@@ -22,23 +22,6 @@
       "sizeDesc": "Shoulder: 47cm\nChest: 57cm\nSleeve: 58cn\nLength: 114cm"
     },
     {
-      "id": "1773654283805",
-      "brand": "HAN KJOBENHAVN",
-      "name": "MA-1",
-      "desc": "Size: S\n\nShoulder: 51cm\nChest: 53cm\nSleeve: 59cm\nLength: 70cm",
-      "category": "OUTER",
-      "price": "₩109,000",
-      "discount": "",
-      "buyLink": "https://fruitsfamily.com/product/4q40s/han-kjobenhavn-ma-1 Han Kjobenhavn MA-1 on FruitsFamily",
-      "newDays": "",
-      "status": "available",
-      "images": [
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773654279188_R0006166.JPG",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773654281373_R0006167.JPG"
-      ],
-      "createdAt": 1773654283805
-    },
-    {
       "id": "1773654129119",
       "brand": "SUNFLOWER",
       "name": "Pinstripe Wool Jacket",
