@@ -7,14 +7,14 @@
     <style>
         /* --- 1. 기본 시스템 & 화면 꽉 채우는 규격 --- */
         :root {
-            --font-huge: 3.5vw;     /* 메인 메뉴 */
-            --font-large: 2.5vw;    /* 서브 메뉴, 헤더, 상세 제목 */
-            --font-medium: 1.2vw;   /* 상품 브랜드, 설명 등 */
-            --font-small: 1vw;      /* 가격, BACK 등 */
-            --font-tiny: 0.8vw;     /* NEW 뱃지 */
+            --font-huge: 3.5vw;     
+            --font-large: 2.5vw;    
+            --font-medium: 1.2vw;   
+            --font-small: 1vw;      
+            --font-tiny: 0.8vw;     
             
-            --gap-menu: 10vh;       /* 메뉴 간 세로 간격 */
-            --gap-list: 6vh;        /* 리스트 간 세로 간격 */
+            --gap-menu: 10vh;       
+            --gap-list: 6vh;        
         }
         @media (max-width: 768px) {
             :root { --font-huge: 8vw; --font-large: 6vw; --font-medium: 3.5vw; --font-small: 3vw; --font-tiny: 2.5vw; --gap-menu: 8vh; --gap-list: 4vh; }
@@ -56,14 +56,11 @@
         .sub-menu-item { font-size: var(--font-large); font-weight: bold; color: #000; cursor: pointer; letter-spacing: 4px; transition: all 0.3s ease; text-align: center; }
         .sub-menu-item:hover { color: #888; transform: scale(1.1); }
 
-        /* =======================================================
-           ★ 4. 오차 없는 100% 칼각 고정 헤더 (BACK + 밑줄) ★ 
-           ======================================================= */
+        /* --- 4. 오차 없는 100% 칼각 고정 헤더 --- */
         .view-header { position: relative; width: 100%; display: flex; justify-content: center; align-items: flex-end; border-bottom: 2px solid #000; padding-bottom: 1.5vh; margin-bottom: 6vh; min-height: 5vh; }
         .current-list-title { font-size: var(--font-large); font-weight: bold; color: #000; letter-spacing: 5px; text-transform: uppercase; margin: 0; line-height: 1; }
         .btn-back { position: absolute; left: 0; bottom: 1.5vh; font-size: var(--font-small); font-weight: bold; color: #999; cursor: pointer; letter-spacing: 2px; transition: color 0.3s ease; margin: 0; line-height: 1; }
         .btn-back:hover { color: #000; }
-        /* ======================================================= */
 
         /* --- 5. 그리드 (상품 목록) --- */
         .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8vh 4vw; width: 100%; }
@@ -85,15 +82,21 @@
         .archive-list-item { font-size: var(--font-large); font-weight: bold; color: #000; cursor: pointer; letter-spacing: 2px; text-align: center; width: 100%; transition: all 0.3s ease; }
         .archive-list-item:hover { color: #888; transform: scale(1.05); }
         
-        /* ★ 아카이브 상세화면 전용 제목 폰트 (크기 축소) ★ */
         .archive-detail-title-text { font-size: var(--font-large); font-weight: bold; letter-spacing: 2px; margin-bottom: 4vh; }
 
-        /* CONTACT */
+        /* ★ CONTACT 수정 (크기/굵기/행간 축소) ★ */
         #page-contact { justify-content: center; }
-        .contact-list { display: flex; flex-direction: column; align-items: center; gap: 8vh; font-size: var(--font-large); font-weight: bold; color: #000; letter-spacing: 2px; line-height: 1.8; text-align: center; transform: translateY(-5vh); }
-        .contact-list a { color: #000; text-decoration: none; border-bottom: 2px solid #000; padding-bottom: 4px; transition: color 0.3s, border-color 0.3s; }
+        .contact-list { 
+            display: flex; flex-direction: column; align-items: center; 
+            gap: 4vh; /* 행간 대폭 축소 */
+            font-size: 1.5vw; /* 폰트 크기 축소 */
+            font-weight: normal; /* 볼드 제거, 일반 굵기 */
+            color: #000; letter-spacing: 2px; line-height: 1.5; text-align: center; 
+            transform: translateY(-5vh); 
+        }
+        .contact-list a { color: #000; text-decoration: none; border-bottom: 1px solid #000; padding-bottom: 2px; transition: color 0.3s, border-color 0.3s; font-weight: normal; }
         .contact-list a:hover { color: #888; border-color: #888; }
-        .mail-text { font-weight: bold; border-bottom: none !important; cursor: default; }
+        .mail-text { font-weight: normal; border-bottom: none !important; cursor: default; }
 
         /* 팝업 모달 */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: all 0.5s ease; z-index: 200; }
@@ -131,6 +134,8 @@
             .content-wrapper { width: 90vw; padding-top: 8vh; }
             .view-header { margin-bottom: 6vh; padding-bottom: 1.5vh; min-height: 4vh; }
             .grid-container { grid-template-columns: repeat(2, 1fr); gap: 4vh 3vw; } 
+            .archive-detail-title-text { font-size: 5vw; }
+            .contact-list { font-size: 3.5vw; gap: 3vh; } /* 모바일에서도 폰트 축소 반영 */
             .modal-content { width: 90vw; height: 80vh; } .modal-image { min-width: 80vw; height: 40vh; }
         }
     </style>
@@ -195,7 +200,7 @@
             
             <div id="view-archive-detail" class="top-view">
                 <div class="view-header">
-                    <div class="btn-back" id="btn-archive-detail-back">< BACK</div>
+                    <div class="btn-back" id="archive-detail-back">< BACK</div>
                     <div class="current-list-title" id="archive-detail-title">TITLE</div>
                 </div>
                 <div id="archive-detail-content" style="width:100%;"></div>
@@ -235,6 +240,7 @@
         }
         window.onload = loadDatabase;
 
+        // ★ 대소문자 (Instagram, Fruitsfamily) 변경 적용 ★
         function renderContact() {
             const contactData = globalData.contact || {};
             const displayEmail = (contactData.email && contactData.email !== "undefined") ? contactData.email : "103selected@gmail.com";
@@ -243,8 +249,8 @@
             
             document.getElementById('contact-container').innerHTML = `
                 <div>Mail: <span class="mail-text">${displayEmail}</span></div>
-                <div>INSTAGRAM: <a href="${displayInsta}" target="_blank">@103selected</a></div>
-                <div>FRUITSFAMILY: <a href="${displayFruits}" target="_blank">@103SELECTED</a></div>
+                <div>Instagram: <a href="${displayInsta}" target="_blank">@103selected</a></div>
+                <div>Fruitsfamily: <a href="${displayFruits}" target="_blank">@103SELECTED</a></div>
             `;
         }
 
@@ -279,6 +285,7 @@
             if(pageId === 'archive') changeArchiveView('main'); 
         }
 
+        // ====== SHOP 로직 ======
         function changeShopView(viewName) {
             document.getElementById('view-shop-main').classList.remove('active'); document.getElementById('view-shop-sub').classList.remove('active'); document.getElementById('view-shop-list').classList.remove('active');
             document.getElementById('view-shop-' + viewName).classList.add('active');
@@ -358,7 +365,6 @@
             });
         }
 
-        // ★ 에러 없이 유튜브 및 사진을 모두 출력하는 핵심 로직 ★
         function openArchiveDetail(id, category) {
             changeArchiveView('detail');
             const item = archives.find(a => a.id === id);
@@ -370,7 +376,6 @@
             let mediaHtml = '';
             let currentImageGroup = [];
 
-            // 사진을 2열로 묶어서 그리는 함수
             function flushImages() {
                 if (currentImageGroup.length > 0) {
                     mediaHtml += `<div style="column-count: 2; column-gap: 4vw; margin-bottom: 8vh; width: 100%;">`;
@@ -380,18 +385,10 @@
                 }
             }
 
-            // 1. 기존의 단일 유튜브 칸(item.youtube)에 있던 영상을 가장 먼저 통합합니다.
             let allMedia = [];
-            if (item.youtube && item.youtube.trim() !== '') {
-                allMedia.push(item.youtube);
-            }
-            
-            // 2. 새롭게 추가한 다중 미디어 배열(item.images)을 합칩니다.
-            if (item.images && item.images.length > 0) {
-                allMedia = allMedia.concat(item.images);
-            }
+            if (item.youtube && item.youtube.trim() !== '') { allMedia.push(item.youtube); }
+            if (item.images && item.images.length > 0) { allMedia = allMedia.concat(item.images); }
 
-            // 3. 배열을 돌면서 영상인지 사진인지 판별해서 화면에 그립니다.
             if (allMedia.length > 0) {
                 allMedia.forEach(mediaUrl => {
                     let vid = getYouTubeVideoId(mediaUrl);
@@ -420,9 +417,7 @@
             let priceHtml = formatPrice(item.price, item.discount);
             if (item.status === "sold") priceHtml = "Sold."; if (item.status === "coming") priceHtml = "Coming Soon";
             
-            let fabricHtml = item.fabric ? item.fabric.replace(/\n/g, '<br>') : 'N/A';
-            
-            document.getElementById('modal-info').innerHTML = `<strong>[${item.brand || 'UNKNOWN'}] ${item.name}</strong><br><br>${item.desc || '상세 설명을 준비 중입니다.'}<br><br>FABRIC:<br>${fabricHtml}<br><br>CONDITION: ${item.condition || 'N/A'}<br>PRICE: ${priceHtml}`;
+            document.getElementById('modal-info').innerHTML = `<strong>[${item.brand || 'UNKNOWN'}] ${item.name}</strong><br><br>${item.desc || '상세 설명을 준비 중입니다.'}<br><br>CONDITION: ${item.condition || 'N/A'}<br>PRICE: ${priceHtml}`;
             
             const gallery = document.getElementById('modal-gallery'); gallery.innerHTML = ''; 
             if (item.images && item.images.length > 0) { item.images.forEach(img => { gallery.innerHTML += `<img src="${img}" class="modal-image">`; }); } else { gallery.innerHTML = `<div class="modal-image">IMAGE PREPARING</div>`; }
