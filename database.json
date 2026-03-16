@@ -22,23 +22,6 @@
       "sizeDesc": "Shoulder: 47cm\nChest: 57cm\nSleeve: 58cn\nLength: 114cm"
     },
     {
-      "id": "1773654129119",
-      "brand": "SUNFLOWER",
-      "name": "Pinstripe Wool Jacket",
-      "desc": "Size: 52\n\nShoulder: 53cm\nChest: 63cm\nSleeve: 69cm\nLength: 70cm",
-      "category": "OUTER",
-      "price": "₩249,000",
-      "discount": "",
-      "buyLink": "https://fruitsfamily.com/product/4q3pe/sunflower-pinstripe-wool-jacket Sunflower Pinstripe Wool Jacket on FruitsFamily",
-      "newDays": "",
-      "status": "available",
-      "images": [
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773654124803_R0006188.JPG",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773654127389_R0006189.JPG"
-      ],
-      "createdAt": 1773654129119
-    },
-    {
       "id": "1773653972187",
       "brand": "JIL SANDER",
       "name": "2013 Black Wool Trousers",
