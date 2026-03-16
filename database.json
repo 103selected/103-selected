@@ -20,24 +20,6 @@
       "condition": "",
       "size": "S",
       "sizeDesc": "Shoulder: 47cm\nChest: 57cm\nSleeve: 58cn\nLength: 114cm"
-    },
-    {
-      "id": "1773653181291",
-      "brand": "JIL SANDER",
-      "name": "00s Rain Mac Coat",
-      "desc": "Size: 44\n\nShoulder: 43cm\nChest: 45cm\nSleeve: 60cm\nLength: 87cm",
-      "category": "OUTER",
-      "price": "₩259,000",
-      "discount": "",
-      "buyLink": "https://fruitsfamily.com/product/4q41v/jil-sander-00s-rain-mac-coat Jil sander 00s Rain Mac Coat on FruitsFamily",
-      "newDays": "",
-      "status": "available",
-      "images": [
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773653176985_R0006190.JPG",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773653174669_R0006192.JPG",
-        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1773653179277_R0006191.JPG"
-      ],
-      "createdAt": 1773653181292
     }
   ],
   "archives": [],
