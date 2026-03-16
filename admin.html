@@ -45,7 +45,6 @@
         .btn-edit { padding: 8px 12px; border: 1px solid #000; background: #fff; color: #000; cursor: pointer; font-size: 12px; margin-left: 10px; }
         .btn-delete { padding: 8px 12px; border: none; background: #ff4444; color: #fff; cursor: pointer; font-size: 12px; }
 
-        /* 사진/영상 에디터 (미리보기) UI */
         .preview-container { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
         .preview-box { position: relative; width: 120px; height: 160px; border: 1px solid #ccc; background: #fff; display: flex; flex-direction: column; border-radius: 5px; overflow: hidden; }
         .preview-box img { width: 100%; height: 120px; object-fit: cover; background: #000; }
@@ -88,8 +87,8 @@
                 <div class="form-group"><label>상품명</label><input type="text" id="p-name" placeholder="예: 1998 Raw Denim Jacket"></div>
                 
                 <div class="form-group full">
-                    <label style="color:#4CAF50; font-weight:bold;">소재 (FABRIC) - 엔터(줄바꿈)를 쳐서 적으세요</label>
-                    <textarea id="p-fabric" rows="3" placeholder="예:&#13;&#10;Cotton: 90%&#13;&#10;Other: 10%"></textarea>
+                    <label style="color:#4CAF50; font-weight:bold;">상품 상세 설명 (엔터 줄바꿈 가능)</label>
+                    <textarea id="p-desc" rows="3" placeholder="상품에 대한 설명, 핏, 특징 등을 자유롭게 적어주세요."></textarea>
                 </div>
                 
                 <div class="form-group"><label>카테고리</label><select id="p-category"><option value="OUTER">OUTER</option><option value="TOP">TOP</option><option value="BOTTOM">BOTTOM</option><option value="SHOES">SHOES</option><option value="ACC">ACC</option></select></div>
@@ -120,8 +119,17 @@
                 <div class="form-group"><label>메뉴 이름 직접 입력</label><input type="text" id="a-category" placeholder="예: LOOKBOOK, VIDEO, FLEA MARKET 등"></div>
                 <div class="form-group"><label>넘버링</label><input type="text" id="a-prefix" placeholder="예: 01."></div>
                 <div class="form-group full"><label>타이틀</label><input type="text" id="a-title" placeholder="주제 입력"></div>
-                <div class="form-group full"><label>테마 설명 (엔터 줄바꿈 가능)</label><textarea id="a-desc" rows="3"></textarea></div>
                 
+                <div class="form-group full">
+                    <label style="color:#2196F3; font-weight:bold;">미디어 배치 순서 (사진과 영상을 둘 다 올릴 경우)</label>
+                    <select id="a-media-order">
+                        <option value="video-first">동영상 먼저, 사진 아래</option>
+                        <option value="image-first">사진 먼저, 동영상 아래</option>
+                    </select>
+                </div>
+
+                <div class="form-group full"><label style="color:#e52d27; font-weight:bold;">유튜브 주소 (없으면 비워두세요)</label><input type="text" id="a-youtube" placeholder="예: https://www.youtube.com/watch?v=..."></div>
+                <div class="form-group full"><label>테마 설명 (비워두면 사진/영상만)</label><textarea id="a-desc" rows="3"></textarea></div>
                 <div class="form-group full" style="border: 2px dashed #000; padding: 20px; border-radius: 5px;">
                     <label style="font-weight:bold; color:#e52d27; font-size:16px;">🎬 미디어 에디터 (사진/영상 자유 배치)</label>
                     <p style="font-size:13px; color:#666; margin-top:5px; margin-bottom: 15px;">유튜브 주소를 넣고 [영상 추가]를 누르거나, 사진을 첨부하세요. 아래 박스에서 ◀ ▶ 버튼을 눌러 순서를 맘대로 섞을 수 있습니다!</p>
@@ -132,7 +140,6 @@
                     </div>
                     
                     <input type="file" id="a-images" class="file-input-wrapper" style="width: 100%; box-sizing: border-box;" accept="image/*" multiple>
-                    
                     <div id="archive-image-preview" class="preview-container" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 20px;"></div>
                 </div>
 
@@ -159,7 +166,6 @@
         let GITHUB_TOKEN = localStorage.getItem('github_token') || "";
         let dbData = { products: [], archives: [], contact: {} }; let dbSha = ""; 
         let editingProductId = null; let editingArchiveId = null;
-        
         let activeShopImages = []; let activeArchiveImages = [];
 
         document.getElementById('p-price').addEventListener('input', function(e) { let value = e.target.value.replace(/[^0-9]/g, ''); e.target.value = value ? '₩' + parseInt(value).toLocaleString('ko-KR') : ''; });
@@ -167,7 +173,6 @@
         function b64EncodeUnicode(str) { return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) { return String.fromCharCode('0x' + p1); })); }
         function b64DecodeUnicode(str) { return decodeURIComponent(atob(str).split('').map(function(c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); }).join('')); }
 
-        // 강력한 유튜브 URL 추출기
         function getYouTubeVideoId(url) {
             try {
                 if (!url) return '';
@@ -175,6 +180,7 @@
                 if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
                 else if (url.includes('v=')) videoId = url.split('v=')[1].split('&')[0];
                 else if (url.includes('embed/')) videoId = url.split('embed/')[1].split('?')[0];
+                else if (url.includes('shorts/')) videoId = url.split('shorts/')[1].split('?')[0];
                 return videoId;
             } catch(e) { return ''; }
         }
@@ -237,11 +243,10 @@
         window.moveShopImage = (i, dir) => { if (i + dir < 0 || i + dir >= activeShopImages.length) return; const temp = activeShopImages[i]; activeShopImages[i] = activeShopImages[i + dir]; activeShopImages[i + dir] = temp; renderShopImagesPreview(); };
         window.removeShopImage = (i) => { activeShopImages.splice(i, 1); renderShopImagesPreview(); };
 
-        // ★ 아카이브 유튜브 텍스트 입력 처리 함수 ★
         window.addYoutubeToArchive = () => {
             const url = document.getElementById('a-youtube-add').value.trim();
             if (!url) return alert("유튜브 주소를 입력해주세요.");
-            activeArchiveImages.push(url); // 배열에 그냥 넣으면 나중에 알아서 판단합니다
+            activeArchiveImages.push(url); 
             document.getElementById('a-youtube-add').value = '';
             renderArchiveImagesPreview();
         };
@@ -250,7 +255,6 @@
             const box = document.getElementById('archive-image-preview'); box.innerHTML = '';
             activeArchiveImages.forEach((url, i) => {
                 let vid = getYouTubeVideoId(url);
-                // 유튜브 링크면 썸네일 가져오기, 아니면 원본 이미지
                 let displayUrl = vid ? `https://img.youtube.com/vi/${vid}/hqdefault.jpg` : url;
                 let badge = vid ? `<div class="thumb-badge" style="background:#e52d27;">▶ VIDEO</div>` : `<div class="thumb-badge" style="background:#000;">PHOTO</div>`;
                 
@@ -261,7 +265,15 @@
         window.removeArchiveImage = (i) => { activeArchiveImages.splice(i, 1); renderArchiveImagesPreview(); };
 
         document.getElementById('btn-add-product').addEventListener('click', async (e) => {
-            const btn = e.target; const brand = document.getElementById('p-brand').value.toUpperCase().trim() || 'UNKNOWN'; const name = document.getElementById('p-name').value; const price = document.getElementById('p-price').value; const buyLink = document.getElementById('p-link').value; const newDays = document.getElementById('p-new-days').value; const fabric = document.getElementById('p-fabric').value; const fileInput = document.getElementById('p-image');
+            const btn = e.target; 
+            const brand = document.getElementById('p-brand').value.toUpperCase().trim() || 'UNKNOWN'; 
+            const name = document.getElementById('p-name').value; 
+            const desc = document.getElementById('p-desc').value; // ★ 상품 설명 가져오기
+            const price = document.getElementById('p-price').value; 
+            const buyLink = document.getElementById('p-link').value; 
+            const newDays = document.getElementById('p-new-days').value; 
+            const fileInput = document.getElementById('p-image');
+
             if(!name || !price) return alert("상품명과 가격을 입력해주세요."); btn.disabled = true; btn.innerText = editingProductId ? "수정 저장 중... ⏳" : "업로드 중... ⏳";
             try {
                 let newUrls = []; for(let i=0; i < fileInput.files.length; i++) newUrls.push(await uploadImage(fileInput.files[i]));
@@ -269,10 +281,10 @@
 
                 if (editingProductId) {
                     const targetItem = dbData.products.find(x => x.id === editingProductId);
-                    targetItem.brand = brand; targetItem.name = name; targetItem.fabric = fabric; targetItem.category = document.getElementById('p-category').value; targetItem.price = price; targetItem.discount = document.getElementById('p-discount').value; targetItem.buyLink = buyLink; targetItem.newDays = newDays; targetItem.status = document.getElementById('p-status').value; 
+                    targetItem.brand = brand; targetItem.name = name; targetItem.desc = desc; targetItem.category = document.getElementById('p-category').value; targetItem.price = price; targetItem.discount = document.getElementById('p-discount').value; targetItem.buyLink = buyLink; targetItem.newDays = newDays; targetItem.status = document.getElementById('p-status').value; 
                     targetItem.images = finalImages; await saveDatabase(); alert("상품 수정 완료!"); cancelEdit('shop'); 
                 } else {
-                    dbData.products.unshift({ id: Date.now().toString(), brand: brand, name: name, fabric: fabric, category: document.getElementById('p-category').value, price: price, discount: document.getElementById('p-discount').value, buyLink: buyLink, newDays: newDays, status: document.getElementById('p-status').value, images: finalImages, createdAt: Date.now() });
+                    dbData.products.unshift({ id: Date.now().toString(), brand: brand, name: name, desc: desc, category: document.getElementById('p-category').value, price: price, discount: document.getElementById('p-discount').value, buyLink: buyLink, newDays: newDays, status: document.getElementById('p-status').value, images: finalImages, createdAt: Date.now() });
                     await saveDatabase(); alert("새 상품 업로드 완료!"); cancelEdit('shop');
                 }
                 renderLists();
@@ -280,20 +292,17 @@
         });
 
         document.getElementById('btn-add-archive').addEventListener('click', async (e) => {
-            const btn = e.target; const category = document.getElementById('a-category').value.toUpperCase().trim() || 'LOOKBOOK'; const title = document.getElementById('a-title').value; const fileInput = document.getElementById('a-images');
+            const btn = e.target; const category = document.getElementById('a-category').value.toUpperCase().trim() || 'LOOKBOOK'; const title = document.getElementById('a-title').value; const youtube = document.getElementById('a-youtube').value; const mediaOrder = document.getElementById('a-media-order').value; const fileInput = document.getElementById('a-images');
             if(!title) return alert("타이틀은 필수입니다."); btn.disabled = true; btn.innerText = editingArchiveId ? "수정 저장 중... ⏳" : `업로드 중... ⏳`;
             try {
                 let newUrls = []; for(let i=0; i < fileInput.files.length; i++) newUrls.push(await uploadImage(fileInput.files[i]));
-                // 기존 배열과 새로 올린 파일 결합
                 let finalImages = [...activeArchiveImages, ...newUrls];
 
                 if (editingArchiveId) {
-                    const targetItem = dbData.archives.find(x => x.id === editingArchiveId); 
-                    targetItem.category = category; targetItem.prefix = document.getElementById('a-prefix').value; targetItem.title = title; targetItem.desc = document.getElementById('a-desc').value; 
-                    targetItem.images = finalImages; targetItem.youtube = ""; // 기존 단일 youtube 필드는 무효화
-                    await saveDatabase(); alert("콘텐츠 수정 완료!"); cancelEdit('archive');
+                    const targetItem = dbData.archives.find(x => x.id === editingArchiveId); targetItem.category = category; targetItem.prefix = document.getElementById('a-prefix').value; targetItem.title = title; targetItem.desc = document.getElementById('a-desc').value; targetItem.youtube = youtube; targetItem.mediaOrder = mediaOrder;
+                    targetItem.images = finalImages; await saveDatabase(); alert("콘텐츠 수정 완료!"); cancelEdit('archive');
                 } else {
-                    dbData.archives.unshift({ id: Date.now().toString(), category: category, prefix: document.getElementById('a-prefix').value, title: title, desc: document.getElementById('a-desc').value, youtube: "", images: finalImages, createdAt: Date.now() }); await saveDatabase(); alert("콘텐츠 발행 완료!"); cancelEdit('archive');
+                    dbData.archives.unshift({ id: Date.now().toString(), category: category, prefix: document.getElementById('a-prefix').value, title: title, desc: document.getElementById('a-desc').value, youtube: youtube, mediaOrder: mediaOrder, images: finalImages, createdAt: Date.now() }); await saveDatabase(); alert("콘텐츠 발행 완료!"); cancelEdit('archive');
                 }
                 renderLists();
             } catch(err) { alert("오류 발생"); } finally { btn.disabled = false; btn.innerText = editingArchiveId ? "수정 내용 저장" : "콘텐츠 업로드"; }
@@ -307,18 +316,13 @@
         window.editItem = (id, type) => {
             if (type === 'shop') {
                 const item = dbData.products.find(x => x.id === id); if(!item) return; editingProductId = id; 
-                document.getElementById('p-brand').value = item.brand || ''; document.getElementById('p-name').value = item.name || ''; document.getElementById('p-fabric').value = item.fabric || ''; document.getElementById('p-category').value = item.category || 'OUTER'; document.getElementById('p-status').value = item.status || 'available'; document.getElementById('p-price').value = item.price || ''; document.getElementById('p-discount').value = item.discount || ''; document.getElementById('p-link').value = item.buyLink || ''; document.getElementById('p-new-days').value = item.newDays || '';
+                document.getElementById('p-brand').value = item.brand || ''; document.getElementById('p-name').value = item.name || ''; document.getElementById('p-desc').value = item.desc || ''; document.getElementById('p-category').value = item.category || 'OUTER'; document.getElementById('p-status').value = item.status || 'available'; document.getElementById('p-price').value = item.price || ''; document.getElementById('p-discount').value = item.discount || ''; document.getElementById('p-link').value = item.buyLink || ''; document.getElementById('p-new-days').value = item.newDays || '';
                 activeShopImages = [...(item.images || [])]; renderShopImagesPreview(); 
                 document.getElementById('shop-form-box').style.border = '2px solid #000'; document.getElementById('shop-form-title').innerText = `✏️ 수정 중: ${item.name}`; document.getElementById('btn-add-product').innerText = "수정 내용 저장"; document.getElementById('btn-add-product').style.backgroundColor = "#ffeb3b"; document.getElementById('btn-add-product').style.color = "#000"; document.getElementById('btn-cancel-shop-edit').style.display = "block"; 
             } else if (type === 'archive') {
                 const item = dbData.archives.find(x => x.id === id); if(!item) return; editingArchiveId = id;
-                document.getElementById('a-category').value = item.category || ''; document.getElementById('a-prefix').value = item.prefix || ''; document.getElementById('a-title').value = item.title || ''; document.getElementById('a-desc').value = item.desc || '';
-                
-                // ★ 구버전 유튜브 호환 로직 (예전 방식으로 올린 유튜브를 자유 배열로 밀어넣어줌) ★
-                activeArchiveImages = [...(item.images || [])];
-                if (item.youtube && item.youtube.trim() !== '') { activeArchiveImages.unshift(item.youtube); }
-                renderArchiveImagesPreview();
-                
+                document.getElementById('a-category').value = item.category || ''; document.getElementById('a-prefix').value = item.prefix || ''; document.getElementById('a-title').value = item.title || ''; document.getElementById('a-youtube').value = item.youtube || ''; document.getElementById('a-media-order').value = item.mediaOrder || 'video-first'; document.getElementById('a-desc').value = item.desc || '';
+                activeArchiveImages = [...(item.images || [])]; renderArchiveImagesPreview();
                 document.getElementById('archive-form-box').style.border = '2px solid #000'; document.getElementById('archive-form-title').innerText = `✏️ 수정 중: ${item.title}`; document.getElementById('btn-add-archive').innerText = "수정 내용 저장"; document.getElementById('btn-add-archive').style.backgroundColor = "#ffeb3b"; document.getElementById('btn-add-archive').style.color = "#000"; document.getElementById('btn-cancel-archive-edit').style.display = "block";
             }
             window.scrollTo({ top: 0, behavior: 'smooth' }); 

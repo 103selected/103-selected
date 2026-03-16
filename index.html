@@ -56,11 +56,14 @@
         .sub-menu-item { font-size: var(--font-large); font-weight: bold; color: #000; cursor: pointer; letter-spacing: 4px; transition: all 0.3s ease; text-align: center; }
         .sub-menu-item:hover { color: #888; transform: scale(1.1); }
 
-        /* --- 4. 오차 없는 100% 칼각 고정 헤더 --- */
+        /* =======================================================
+           ★ 4. 오차 없는 100% 칼각 고정 헤더 (BACK + 밑줄) ★ 
+           ======================================================= */
         .view-header { position: relative; width: 100%; display: flex; justify-content: center; align-items: flex-end; border-bottom: 2px solid #000; padding-bottom: 1.5vh; margin-bottom: 6vh; min-height: 5vh; }
         .current-list-title { font-size: var(--font-large); font-weight: bold; color: #000; letter-spacing: 5px; text-transform: uppercase; margin: 0; line-height: 1; }
         .btn-back { position: absolute; left: 0; bottom: 1.5vh; font-size: var(--font-small); font-weight: bold; color: #999; cursor: pointer; letter-spacing: 2px; transition: color 0.3s ease; margin: 0; line-height: 1; }
         .btn-back:hover { color: #000; }
+        /* ======================================================= */
 
         /* --- 5. 그리드 (상품 목록) --- */
         .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8vh 4vw; width: 100%; }
@@ -84,16 +87,9 @@
         
         .archive-detail-title-text { font-size: var(--font-large); font-weight: bold; letter-spacing: 2px; margin-bottom: 4vh; }
 
-        /* ★ CONTACT 수정 (크기/굵기/행간 축소) ★ */
+        /* CONTACT (정중앙, 크기 대폭 확대, 메일 볼드체) */
         #page-contact { justify-content: center; }
-        .contact-list { 
-            display: flex; flex-direction: column; align-items: center; 
-            gap: 4vh; /* 행간 대폭 축소 */
-            font-size: 1.5vw; /* 폰트 크기 축소 */
-            font-weight: normal; /* 볼드 제거, 일반 굵기 */
-            color: #000; letter-spacing: 2px; line-height: 1.5; text-align: center; 
-            transform: translateY(-5vh); 
-        }
+        .contact-list { display: flex; flex-direction: column; align-items: center; gap: 4vh; font-size: 1.5vw; font-weight: normal; color: #000; letter-spacing: 2px; line-height: 1.5; text-align: center; transform: translateY(-5vh); }
         .contact-list a { color: #000; text-decoration: none; border-bottom: 1px solid #000; padding-bottom: 2px; transition: color 0.3s, border-color 0.3s; font-weight: normal; }
         .contact-list a:hover { color: #888; border-color: #888; }
         .mail-text { font-weight: normal; border-bottom: none !important; cursor: default; }
@@ -135,7 +131,7 @@
             .view-header { margin-bottom: 6vh; padding-bottom: 1.5vh; min-height: 4vh; }
             .grid-container { grid-template-columns: repeat(2, 1fr); gap: 4vh 3vw; } 
             .archive-detail-title-text { font-size: 5vw; }
-            .contact-list { font-size: 3.5vw; gap: 3vh; } /* 모바일에서도 폰트 축소 반영 */
+            .contact-list { font-size: 4.5vw; }
             .modal-content { width: 90vw; height: 80vh; } .modal-image { min-width: 80vw; height: 40vh; }
         }
     </style>
@@ -240,7 +236,6 @@
         }
         window.onload = loadDatabase;
 
-        // ★ 대소문자 (Instagram, Fruitsfamily) 변경 적용 ★
         function renderContact() {
             const contactData = globalData.contact || {};
             const displayEmail = (contactData.email && contactData.email !== "undefined") ? contactData.email : "103selected@gmail.com";
@@ -285,7 +280,6 @@
             if(pageId === 'archive') changeArchiveView('main'); 
         }
 
-        // ====== SHOP 로직 ======
         function changeShopView(viewName) {
             document.getElementById('view-shop-main').classList.remove('active'); document.getElementById('view-shop-sub').classList.remove('active'); document.getElementById('view-shop-list').classList.remove('active');
             document.getElementById('view-shop-' + viewName).classList.add('active');
@@ -417,7 +411,10 @@
             let priceHtml = formatPrice(item.price, item.discount);
             if (item.status === "sold") priceHtml = "Sold."; if (item.status === "coming") priceHtml = "Coming Soon";
             
-            document.getElementById('modal-info').innerHTML = `<strong>[${item.brand || 'UNKNOWN'}] ${item.name}</strong><br><br>${item.desc || '상세 설명을 준비 중입니다.'}<br><br>CONDITION: ${item.condition || 'N/A'}<br>PRICE: ${priceHtml}`;
+            // ★ FABRIC 제거, 상품 상세 설명(desc)만 유지 ★
+            let descHtml = item.desc ? item.desc.replace(/\n/g, '<br>') : '상세 설명을 준비 중입니다.';
+            
+            document.getElementById('modal-info').innerHTML = `<strong>[${item.brand || 'UNKNOWN'}] ${item.name}</strong><br><br>${descHtml}<br><br>CONDITION: ${item.condition || 'N/A'}<br>PRICE: ${priceHtml}`;
             
             const gallery = document.getElementById('modal-gallery'); gallery.innerHTML = ''; 
             if (item.images && item.images.length > 0) { item.images.forEach(img => { gallery.innerHTML += `<img src="${img}" class="modal-image">`; }); } else { gallery.innerHTML = `<div class="modal-image">IMAGE PREPARING</div>`; }
