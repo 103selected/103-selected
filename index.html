@@ -91,7 +91,7 @@
         .mail-text { font-weight: normal; border-bottom: none !important; cursor: default; }
 
         /* =======================================================
-           ★ 팝업 모달 완벽 교정본: 버튼 외부 분리 & Buy 버튼 고정 완벽 해제 ★
+           ★ 팝업 모달: 버튼 분리 & 자연스러운 스크롤 유지 ★
            ======================================================= */
         
         .modal-overlay { 
@@ -112,7 +112,7 @@
             transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
         }
 
-        /* CLOSE 버튼: 바깥 상단에 고정 */
+        /* CLOSE 버튼 */
         .btn-close-modal { 
             font-size: 0.9vw; font-weight: bold; color: #000; 
             cursor: pointer; letter-spacing: 2px; transition: all 0.3s ease; 
@@ -129,7 +129,7 @@
             background-color: #ffffff; 
             border-radius: 8px; 
             display: flex; flex-direction: column; 
-            overflow-y: auto; /* 박스 내부 스크롤 */
+            overflow-y: auto; 
             box-shadow: 0 20px 60px rgba(0,0,0,0.2);
             padding: 40px 40px; box-sizing: border-box;
             scrollbar-width: none; 
@@ -158,12 +158,11 @@
         .modal-info-container { display: flex; flex-direction: column; flex-grow: 1; }
         .modal-info { font-size: var(--font-medium); line-height: 1.8; color: #000; letter-spacing: 1px; }
         
-        /* ★ Buy 버튼: 모든 고정(absolute, sticky) 속성을 완전히 날려버림 ★ 
-           이제 텍스트 뒤에 얌전히 붙어서 스크롤을 내려야만 나타납니다. */
+        /* Buy 버튼 */
         .buy-btn-container { 
             width: 100%; 
             display: flex; justify-content: flex-end; 
-            margin-top: 5vh; /* 텍스트와 충분한 여백 확보 */
+            margin-top: 5vh; 
             padding-bottom: 2vh; 
         }
         .buy-btn { font-size: var(--font-large); font-weight: bold; color: #000; cursor: pointer; text-decoration: none; letter-spacing: 2px; transition: opacity 0.3s ease; }
@@ -205,7 +204,6 @@
             .btn-close-modal { font-size: 3vw; padding: 6px 14px; margin-bottom: 1vh; }
             .modal-info { font-size: 3.5vw; line-height: 1.6; } 
             
-            /* 모바일에서도 마진 부여 */
             .buy-btn-container { margin-top: 4vh; padding-bottom: 2vh; }
             .buy-btn { font-size: 5vw; } .disable-btn { font-size: 5vw; }
         }
@@ -271,7 +269,7 @@
             
             <div id="view-archive-detail" class="top-view">
                 <div class="view-header">
-                    <div class="btn-back" id="archive-detail-back">< BACK</div>
+                    <div class="btn-back" id="btn-archive-detail-back">< BACK</div>
                     <div class="current-list-title" id="archive-detail-title">TITLE</div>
                 </div>
                 <div id="archive-detail-content" style="width:100%;"></div>
@@ -292,7 +290,6 @@
                 
                 <div class="modal-info-container">
                     <div class="modal-info" id="modal-info"></div>
-                    
                     <div class="buy-btn-container" id="buy-btn-container"></div>
                 </div>
             </div>
@@ -446,12 +443,15 @@
             });
         }
 
+        // ★ 해결된 부분: getElementById 오류를 막아 아카이브가 정상 출력됨 ★
         function openArchiveDetail(id, category) {
             changeArchiveView('detail');
             const item = archives.find(a => a.id === id);
             let prefixText = item.prefix ? `${item.prefix} ` : '';
             
             document.getElementById('archive-detail-title').innerText = category;
+            
+            // 이 줄이 에러를 일으켰던 원인입니다. id를 일치시켰습니다.
             document.getElementById('btn-archive-detail-back').onclick = () => showArchiveList(category);
             
             let mediaHtml = '';
@@ -549,7 +549,7 @@
             else if (item.status === "coming") btnContainer.innerHTML = `<span class="buy-btn disable-btn">Coming Soon</span>`;
             else btnContainer.innerHTML = `<a href="${item.buyLink || '#'}" target="_blank" class="buy-btn">Buy</a>`; 
 
-            // 팝업 열 때 스크롤을 맨 위로 초기화 (이제 팝업창 자체를 스크롤함)
+            // 팝업 열 때 스크롤 맨 위로 초기화
             document.querySelector('.modal-content').scrollTop = 0;
             body.classList.add('modal-open');
         }
