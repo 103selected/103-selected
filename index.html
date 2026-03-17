@@ -53,12 +53,17 @@
         .top-view.active { display: flex; }
 
         .sub-list-container { display: flex; flex-direction: column; align-items: center; width: 100%; gap: var(--gap-list); margin-bottom: 10vh; }
-        .sub-menu-item { font-size: var(--font-large); font-weight: bold; color: #000; cursor: pointer; letter-spacing: 4px; transition: all 0.3s ease; text-align: center; }
+        
+        /* ★ 서브 메뉴 아이템 (OUTER, TOP 등) 크기 축소 (기존 var(--font-large) -> 2vw 적용) ★ */
+        .sub-menu-item { font-size: 2vw; font-weight: bold; color: #000; cursor: pointer; letter-spacing: 4px; transition: all 0.3s ease; text-align: center; }
         .sub-menu-item:hover { color: #888; transform: scale(1.1); }
 
         /* --- 4. 오차 없는 100% 칼각 고정 헤더 --- */
         .view-header { position: relative; width: 100%; display: flex; justify-content: center; align-items: flex-end; border-bottom: 2px solid #000; padding-bottom: 1.5vh; margin-bottom: 6vh; min-height: 5vh; }
-        .current-list-title { font-size: var(--font-large); font-weight: bold; color: #000; letter-spacing: 5px; text-transform: uppercase; margin: 0; line-height: 1; }
+        
+        /* 타이틀 글씨 크기 유지 (1.6vw) */
+        .current-list-title { font-size: 1.6vw; font-weight: bold; color: #000; letter-spacing: 5px; text-transform: uppercase; margin: 0; line-height: 1; }
+        
         .btn-back { position: absolute; left: 0; bottom: 1.5vh; font-size: var(--font-small); font-weight: bold; color: #999; cursor: pointer; letter-spacing: 2px; transition: color 0.3s ease; margin: 0; line-height: 1; }
         .btn-back:hover { color: #000; }
 
@@ -91,7 +96,7 @@
         .mail-text { font-weight: normal; border-bottom: none !important; cursor: default; }
 
         /* =======================================================
-           ★ 팝업 모달: 완벽한 화이트 오버레이 (조건 완벽 복구) ★
+           ★ 팝업 모달 오리지널 화이트 감성 ★
            ======================================================= */
         
         .modal-overlay { 
@@ -173,6 +178,11 @@
         @media (max-width: 768px) {
             .logo-btn { font-size: 12vw; } .top-left-logo { top: 20px; left: 20px; font-size: 4vw; } .top-right-nav { top: 20px; right: 20px; gap: 4vw; }
             .nav-item { font-size: 3vw; } .menu-item { font-size: 8vw; } 
+            
+            /* ★ 모바일 서브 메뉴 사이즈 최적화 ★ */
+            .sub-menu-item { font-size: 5vw; }
+            .current-list-title { font-size: 4vw; }
+            
             .content-wrapper { width: 90vw; padding-top: 8vh; padding-bottom: 30vh; }
             .view-header { margin-bottom: 6vh; padding-bottom: 1.5vh; min-height: 4vh; }
             .grid-container { grid-template-columns: repeat(2, 1fr); gap: 4vh 3vw; margin-bottom: 10vh; } 
@@ -493,19 +503,28 @@
             let priceHtml = formatPrice(item.price, item.discount);
             if (item.status === "sold") priceHtml = "Sold."; if (item.status === "coming") priceHtml = "Coming Soon";
             
-            let descHtml = item.desc ? item.desc.replace(/\n/g, '<br>') : '상세 설명을 준비 중입니다.';
+            let descHtml = item.desc ? item.desc.replace(/\n/g, '<br>') : '';
+            if (descHtml !== '') descHtml += '<br><br>'; 
             
             let sizeHtml = '';
-            if (item.size && item.size.trim() !== '') {
-                let sizeDetailsHtml = item.sizeDesc ? item.sizeDesc.replace(/\n/g, '<br>') : '';
-                let detailBox = sizeDetailsHtml ? `<div id="modal-size-details" style="display:none; padding-left: 10px; margin-top: 5px; margin-bottom: 5px; font-size: 0.9em; line-height: 1.7; color: #555;">${sizeDetailsHtml}</div>` : '';
-                sizeHtml = `<div style="cursor:pointer; text-decoration:underline; font-weight:bold; margin-bottom:5px;" onclick="toggleSizeDetails()">Size: ${item.size}</div>${detailBox}<br>`;
-            } else { sizeHtml = `Size: N/A<br><br>`; }
+            if ((item.size && item.size.trim() !== '') || (item.sizeDesc && item.sizeDesc.trim() !== '')) {
+                let detailContent = '';
+                if (item.size && item.size.trim() !== '') {
+                    detailContent += `Size: ${item.size}<br>`;
+                }
+                if (item.sizeDesc && item.sizeDesc.trim() !== '') {
+                    detailContent += item.sizeDesc.replace(/\n/g, '<br>');
+                }
+                
+                let detailBox = `<div id="modal-size-details" style="display:none; padding-left: 10px; margin-top: 5px; margin-bottom: 5px; font-size: 0.9em; line-height: 1.7; color: #555;">${detailContent}</div>`;
+                sizeHtml = `<div style="cursor:pointer; text-decoration:underline; font-weight:bold; margin-bottom:5px;" onclick="toggleSizeDetails()">Size</div>${detailBox}<br>`;
+            } else { 
+                sizeHtml = `<div style="font-weight:bold; margin-bottom:5px;">Size: N/A</div><br>`; 
+            }
 
-            // ★ 완벽하게 요청하신 컨디션이 빠진 순서 적용 ★
             document.getElementById('modal-info').innerHTML = `
                 <strong>[${item.brand || 'UNKNOWN'}] ${item.name}</strong><br><br>
-                ${descHtml}<br><br>
+                ${descHtml}
                 ${sizeHtml}
                 PRICE: ${priceHtml}
             `;
