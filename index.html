@@ -91,55 +91,40 @@
         .mail-text { font-weight: normal; border-bottom: none !important; cursor: default; }
 
         /* =======================================================
-           ★ 팝업 모달: 버튼 분리 & 자연스러운 스크롤 유지 ★
+           ★ 팝업 모달: 완벽한 화이트 오버레이 (조건 완벽 복구) ★
            ======================================================= */
         
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background-color: rgba(0, 0, 0, 0.4); 
+            background-color: rgba(255, 255, 255, 0.98); 
             backdrop-filter: blur(8px); 
-            display: flex; justify-content: center; align-items: center; 
+            display: flex; justify-content: center; align-items: flex-start; 
             opacity: 0; pointer-events: none; transition: all 0.4s ease; z-index: 200; 
-        }
-        
-        /* 팝업창을 감싸는 래퍼 */
-        .modal-wrapper {
-            width: 80vw;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end; 
-            transform: translateY(30px); 
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
-        }
-
-        /* CLOSE 버튼 */
-        .btn-close-modal { 
-            font-size: 0.9vw; font-weight: bold; color: #000; 
-            cursor: pointer; letter-spacing: 2px; transition: all 0.3s ease; 
-            background: #fff; padding: 6px 16px; border-radius: 20px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 300;
-            margin-bottom: 1.5vh; 
-        }
-        .btn-close-modal:hover { opacity: 0.7; transform: scale(1.05); }
-
-        /* 팝업 하얀 박스 본체 */
-        .modal-content { 
-            width: 100%; 
-            max-height: 80vh; 
-            background-color: #ffffff; 
-            border-radius: 8px; 
-            display: flex; flex-direction: column; 
             overflow-y: auto; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            padding: 40px 40px; box-sizing: border-box;
-            scrollbar-width: none; 
+            scrollbar-width: none;
         }
-        .modal-content::-webkit-scrollbar { display: none; }
+        .modal-overlay::-webkit-scrollbar { display: none; }
         
-        /* 사진 갤러리 */
+        .modal-content { 
+            position: relative; 
+            width: 75vw; 
+            display: flex; flex-direction: column; 
+            transform: translateY(20px); 
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
+            padding-top: 10vh; padding-bottom: 20vh; 
+        }
+        
+        .btn-close-modal { 
+            align-self: flex-end; 
+            font-size: var(--font-small); font-weight: bold; color: #000; 
+            cursor: pointer; letter-spacing: 2px; transition: opacity 0.3s ease; 
+            margin-bottom: 3vh; 
+        }
+        .btn-close-modal:hover { opacity: 0.4; }
+        
         .modal-gallery { 
             display: flex; gap: 20px; width: 100%; overflow-x: auto; scrollbar-width: none; 
-            align-items: center; margin-bottom: 30px; padding-top: 10px; flex-shrink: 0;
+            align-items: center; margin-bottom: 4vh; flex-shrink: 0;
         }
         .modal-gallery::-webkit-scrollbar { display: none; }
         
@@ -149,21 +134,16 @@
             max-width: 100%; 
             object-fit: contain; 
             border-radius: 4px;
-            background-color: #f9f9f9; 
+            background-color: transparent; 
             cursor: zoom-in; 
             flex-shrink: 0; 
         }
         
-        /* 텍스트 정보 칸 */
-        .modal-info-container { display: flex; flex-direction: column; flex-grow: 1; }
-        .modal-info { font-size: var(--font-medium); line-height: 1.8; color: #000; letter-spacing: 1px; }
+        .modal-info-container { display: flex; flex-direction: column; width: 100%; }
+        .modal-info { font-size: var(--font-medium); line-height: 1.8; color: #000; letter-spacing: 1px; text-align: left; }
         
-        /* Buy 버튼 */
         .buy-btn-container { 
-            width: 100%; 
-            display: flex; justify-content: flex-end; 
-            margin-top: 5vh; 
-            padding-bottom: 2vh; 
+            align-self: flex-end; margin-top: 4vh; 
         }
         .buy-btn { font-size: var(--font-large); font-weight: bold; color: #000; cursor: pointer; text-decoration: none; letter-spacing: 2px; transition: opacity 0.3s ease; }
         .buy-btn:hover { opacity: 0.4; }
@@ -186,8 +166,9 @@
         body.page-mode .top-left-logo { opacity: 1; pointer-events: auto; transition: opacity 0.8s ease 0s; }
         body.page-mode .top-right-nav { opacity: 1; pointer-events: auto; transition: opacity 0.8s ease 0.2s; }
         .page-content.is-open { opacity: 1; pointer-events: auto; transition: opacity 0.8s ease 0.4s; }
+        
         body.modal-open .modal-overlay { opacity: 1; pointer-events: auto; }
-        body.modal-open .modal-wrapper { transform: translateY(0); }
+        body.modal-open .modal-content { transform: translateY(0); }
 
         @media (max-width: 768px) {
             .logo-btn { font-size: 12vw; } .top-left-logo { top: 20px; left: 20px; font-size: 4vw; } .top-right-nav { top: 20px; right: 20px; gap: 4vw; }
@@ -198,13 +179,10 @@
             .archive-detail-title-text { font-size: 5vw; }
             .contact-list { font-size: 4.5vw; gap: 3vh; } 
             
-            .modal-wrapper { width: 95vw; }
-            .modal-content { max-height: 80vh; padding: 25px 20px; } 
+            .modal-content { width: 90vw; padding-top: 5vh; }
             .modal-image { height: 45vh; } 
-            .btn-close-modal { font-size: 3vw; padding: 6px 14px; margin-bottom: 1vh; }
             .modal-info { font-size: 3.5vw; line-height: 1.6; } 
-            
-            .buy-btn-container { margin-top: 4vh; padding-bottom: 2vh; }
+            .buy-btn-container { margin-top: 4vh; }
             .buy-btn { font-size: 5vw; } .disable-btn { font-size: 5vw; }
         }
     </style>
@@ -282,18 +260,18 @@
     </div>
 
     <div class="modal-overlay" id="modal-overlay">
-        <div class="modal-wrapper">
+        
+        <div class="modal-content">
             <div class="btn-close-modal" id="btn-close-modal">CLOSE</div>
             
-            <div class="modal-content">
-                <div class="modal-gallery" id="modal-gallery"></div>
-                
-                <div class="modal-info-container">
-                    <div class="modal-info" id="modal-info"></div>
-                    <div class="buy-btn-container" id="buy-btn-container"></div>
-                </div>
+            <div class="modal-gallery" id="modal-gallery"></div>
+            
+            <div class="modal-info-container">
+                <div class="modal-info" id="modal-info"></div>
+                <div class="buy-btn-container" id="buy-btn-container"></div>
             </div>
         </div>
+        
     </div>
 
     <div class="zoom-overlay" id="zoom-overlay" onclick="closeZoom()">
@@ -443,15 +421,12 @@
             });
         }
 
-        // ★ 해결된 부분: getElementById 오류를 막아 아카이브가 정상 출력됨 ★
         function openArchiveDetail(id, category) {
             changeArchiveView('detail');
             const item = archives.find(a => a.id === id);
             let prefixText = item.prefix ? `${item.prefix} ` : '';
             
             document.getElementById('archive-detail-title').innerText = category;
-            
-            // 이 줄이 에러를 일으켰던 원인입니다. id를 일치시켰습니다.
             document.getElementById('btn-archive-detail-back').onclick = () => showArchiveList(category);
             
             let mediaHtml = '';
@@ -523,15 +498,15 @@
             let sizeHtml = '';
             if (item.size && item.size.trim() !== '') {
                 let sizeDetailsHtml = item.sizeDesc ? item.sizeDesc.replace(/\n/g, '<br>') : '';
-                let detailBox = sizeDetailsHtml ? `<div id="modal-size-details" style="display:none; padding:15px; margin:15px 0; background:#f9f9f9; font-size:0.95em; line-height:1.7; text-align:left; border-radius:4px;">${sizeDetailsHtml}</div>` : '';
-                sizeHtml = `SIZE: <span style="text-decoration:underline; cursor:pointer; font-weight:bold; color:#000;" onclick="toggleSizeDetails()">${item.size}</span>${detailBox}<br>`;
-            } else { sizeHtml = `SIZE: N/A<br>`; }
+                let detailBox = sizeDetailsHtml ? `<div id="modal-size-details" style="display:none; padding-left: 10px; margin-top: 5px; margin-bottom: 5px; font-size: 0.9em; line-height: 1.7; color: #555;">${sizeDetailsHtml}</div>` : '';
+                sizeHtml = `<div style="cursor:pointer; text-decoration:underline; font-weight:bold; margin-bottom:5px;" onclick="toggleSizeDetails()">Size: ${item.size}</div>${detailBox}<br>`;
+            } else { sizeHtml = `Size: N/A<br><br>`; }
 
+            // ★ 완벽하게 요청하신 컨디션이 빠진 순서 적용 ★
             document.getElementById('modal-info').innerHTML = `
                 <strong>[${item.brand || 'UNKNOWN'}] ${item.name}</strong><br><br>
                 ${descHtml}<br><br>
                 ${sizeHtml}
-                CONDITION: ${item.condition || 'N/A'}<br>
                 PRICE: ${priceHtml}
             `;
             
@@ -549,8 +524,7 @@
             else if (item.status === "coming") btnContainer.innerHTML = `<span class="buy-btn disable-btn">Coming Soon</span>`;
             else btnContainer.innerHTML = `<a href="${item.buyLink || '#'}" target="_blank" class="buy-btn">Buy</a>`; 
 
-            // 팝업 열 때 스크롤 맨 위로 초기화
-            document.querySelector('.modal-content').scrollTop = 0;
+            document.getElementById('modal-overlay').scrollTop = 0;
             body.classList.add('modal-open');
         }
         
