@@ -53,15 +53,12 @@
         .top-view.active { display: flex; }
 
         .sub-list-container { display: flex; flex-direction: column; align-items: center; width: 100%; gap: var(--gap-list); margin-bottom: 10vh; }
-        
-        /* ★ 서브 메뉴 아이템 (OUTER, TOP 등) 크기 축소 (기존 var(--font-large) -> 2vw 적용) ★ */
-        .sub-menu-item { font-size: 2vw; font-weight: bold; color: #000; cursor: pointer; letter-spacing: 4px; transition: all 0.3s ease; text-align: center; }
+        .sub-menu-item { font-size: var(--font-large); font-weight: bold; color: #000; cursor: pointer; letter-spacing: 4px; transition: all 0.3s ease; text-align: center; }
         .sub-menu-item:hover { color: #888; transform: scale(1.1); }
 
         /* --- 4. 오차 없는 100% 칼각 고정 헤더 --- */
         .view-header { position: relative; width: 100%; display: flex; justify-content: center; align-items: flex-end; border-bottom: 2px solid #000; padding-bottom: 1.5vh; margin-bottom: 6vh; min-height: 5vh; }
         
-        /* 타이틀 글씨 크기 유지 (1.6vw) */
         .current-list-title { font-size: 1.6vw; font-weight: bold; color: #000; letter-spacing: 5px; text-transform: uppercase; margin: 0; line-height: 1; }
         
         .btn-back { position: absolute; left: 0; bottom: 1.5vh; font-size: var(--font-small); font-weight: bold; color: #999; cursor: pointer; letter-spacing: 2px; transition: color 0.3s ease; margin: 0; line-height: 1; }
@@ -96,13 +93,13 @@
         .mail-text { font-weight: normal; border-bottom: none !important; cursor: default; }
 
         /* =======================================================
-           ★ 팝업 모달 오리지널 화이트 감성 ★
+           ★ 팝업 모달 : 투명도 조정으로 주변이 반투명하게 보이도록 복구 ★
            ======================================================= */
         
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background-color: rgba(255, 255, 255, 0.98); 
-            backdrop-filter: blur(8px); 
+            background-color: rgba(255, 255, 255, 0.85); /* ★ 0.98에서 0.85로 낮춰서 은은하게 비치도록 수정 ★ */
+            backdrop-filter: blur(10px); /* 텍스트 가독성을 위해 살짝 블러 처리 */
             display: flex; justify-content: center; align-items: flex-start; 
             opacity: 0; pointer-events: none; transition: all 0.4s ease; z-index: 200; 
             overflow-y: auto; 
@@ -179,7 +176,6 @@
             .logo-btn { font-size: 12vw; } .top-left-logo { top: 20px; left: 20px; font-size: 4vw; } .top-right-nav { top: 20px; right: 20px; gap: 4vw; }
             .nav-item { font-size: 3vw; } .menu-item { font-size: 8vw; } 
             
-            /* ★ 모바일 서브 메뉴 사이즈 최적화 ★ */
             .sub-menu-item { font-size: 5vw; }
             .current-list-title { font-size: 4vw; }
             
@@ -442,10 +438,13 @@
             let mediaHtml = '';
             let currentImageGroup = [];
 
+            // ★ 아카이브 사진에 확대(Zoom) 액션 완벽 적용 ★
             function flushImages() {
                 if (currentImageGroup.length > 0) {
                     mediaHtml += `<div style="column-count: 2; column-gap: 4vw; margin-bottom: 8vh; width: 100%;">`;
-                    currentImageGroup.forEach(img => { mediaHtml += `<img src="${img}" style="width: 100%; display: block; margin-bottom: 4vw; background: #f4f4f4;">`; });
+                    currentImageGroup.forEach(img => { 
+                        mediaHtml += `<img src="${img}" style="width: 100%; display: block; margin-bottom: 4vw; background: transparent; cursor: zoom-in;" onclick="openZoom('${img}')">`; 
+                    });
                     mediaHtml += `</div>`;
                     currentImageGroup = [];
                 }
@@ -543,6 +542,7 @@
             else if (item.status === "coming") btnContainer.innerHTML = `<span class="buy-btn disable-btn">Coming Soon</span>`;
             else btnContainer.innerHTML = `<a href="${item.buyLink || '#'}" target="_blank" class="buy-btn">Buy</a>`; 
 
+            // 모달창 열 때 스크롤 맨 위로 초기화
             document.getElementById('modal-overlay').scrollTop = 0;
             body.classList.add('modal-open');
         }
