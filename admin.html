@@ -91,8 +91,7 @@
                     <textarea id="p-desc" rows="3" placeholder="상품에 대한 설명, 핏, 특징 등을 자유롭게 적어주세요."></textarea>
                 </div>
                 
-                <div class="form-group"><label style="color:#FF9800; font-weight:bold;">컨디션 (CONDITION)</label><input type="text" id="p-condition" placeholder="예: 9/10, S급, 새상품 등"></div>
-                <div class="form-group"><label style="color:#FF9800; font-weight:bold;">사이즈 (SIZE)</label><input type="text" id="p-size" placeholder="예: 52, M, L 등"></div>
+                <div class="form-group full"><label style="color:#FF9800; font-weight:bold;">사이즈 (SIZE)</label><input type="text" id="p-size" placeholder="예: 52, M, L 등"></div>
                 <div class="form-group full">
                     <label style="color:#FF9800; font-weight:bold;">상세 사이즈 (엔터 줄바꿈 가능) *소비자가 사이즈 클릭 시 보임</label>
                     <textarea id="p-size-desc" rows="3" placeholder="예:&#13;&#10;Shoulder: 38cm&#13;&#10;Chest: 45cm&#13;&#10;Sleeve: 59cm&#13;&#10;Length: 49cm"></textarea>
@@ -273,10 +272,10 @@
 
         document.getElementById('btn-add-product').addEventListener('click', async (e) => {
             const btn = e.target; 
-            const brand = document.getElementById('p-brand').value.trim() || 'UNKNOWN'; // ★ 강제 대문자 변환 삭제 ★
+            const brand = document.getElementById('p-brand').value.trim() || 'UNKNOWN'; 
             const name = document.getElementById('p-name').value; 
             const desc = document.getElementById('p-desc').value;
-            const condition = document.getElementById('p-condition').value;
+            // 컨디션은 삭제됨
             const size = document.getElementById('p-size').value; 
             const sizeDesc = document.getElementById('p-size-desc').value;
             const price = document.getElementById('p-price').value; 
@@ -292,13 +291,13 @@
                 if (editingProductId) {
                     const targetItem = dbData.products.find(x => x.id === editingProductId);
                     targetItem.brand = brand; targetItem.name = name; targetItem.desc = desc; 
-                    targetItem.condition = condition; targetItem.size = size; targetItem.sizeDesc = sizeDesc; 
+                    targetItem.size = size; targetItem.sizeDesc = sizeDesc; 
                     targetItem.category = document.getElementById('p-category').value; targetItem.price = price; targetItem.discount = document.getElementById('p-discount').value; targetItem.buyLink = buyLink; targetItem.newDays = newDays; targetItem.status = document.getElementById('p-status').value; 
                     targetItem.images = finalImages; await saveDatabase(); alert("상품 수정 완료!"); cancelEdit('shop'); 
                 } else {
                     dbData.products.unshift({ 
                         id: Date.now().toString(), brand: brand, name: name, desc: desc, 
-                        condition: condition, size: size, sizeDesc: sizeDesc,
+                        size: size, sizeDesc: sizeDesc,
                         category: document.getElementById('p-category').value, price: price, discount: document.getElementById('p-discount').value, buyLink: buyLink, newDays: newDays, status: document.getElementById('p-status').value, images: finalImages, createdAt: Date.now() 
                     });
                     await saveDatabase(); alert("새 상품 업로드 완료!"); cancelEdit('shop');
@@ -333,7 +332,7 @@
             if (type === 'shop') {
                 const item = dbData.products.find(x => x.id === id); if(!item) return; editingProductId = id; 
                 document.getElementById('p-brand').value = item.brand || ''; document.getElementById('p-name').value = item.name || ''; document.getElementById('p-desc').value = item.desc || ''; 
-                document.getElementById('p-condition').value = item.condition || ''; document.getElementById('p-size').value = item.size || ''; document.getElementById('p-size-desc').value = item.sizeDesc || ''; 
+                document.getElementById('p-size').value = item.size || ''; document.getElementById('p-size-desc').value = item.sizeDesc || ''; 
                 document.getElementById('p-category').value = item.category || 'OUTER'; document.getElementById('p-status').value = item.status || 'available'; document.getElementById('p-price').value = item.price || ''; document.getElementById('p-discount').value = item.discount || ''; document.getElementById('p-link').value = item.buyLink || ''; document.getElementById('p-new-days').value = item.newDays || '';
                 activeShopImages = [...(item.images || [])]; renderShopImagesPreview(); 
                 document.getElementById('shop-form-box').style.border = '2px solid #000'; document.getElementById('shop-form-title').innerText = `✏️ 수정 중: ${item.name}`; document.getElementById('btn-add-product').innerText = "수정 내용 저장"; document.getElementById('btn-add-product').style.backgroundColor = "#ffeb3b"; document.getElementById('btn-add-product').style.color = "#000"; document.getElementById('btn-cancel-shop-edit').style.display = "block"; 
