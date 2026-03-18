@@ -4,7 +4,7 @@
       "id": "1773654560024",
       "brand": "Helmut Lang",
       "name": "Parachute Bondage Parka",
-      "desc": "",
+      "desc": "상품에 대한 설명",
       "category": "OUTER",
       "price": "₩329,000",
       "discount": "",
@@ -19,7 +19,7 @@
       "createdAt": 1773654560024,
       "condition": "",
       "size": "S",
-      "sizeDesc": "Shoulder: 47cm\nChest: 57cm\nSleeve: 58cn\nLength: 114cm"
+      "sizeDesc": "\nShoulder: 47cm\nChest: 57cm\nSleeve: 58cn\nLength: 114cm"
     }
   ],
   "archives": [
