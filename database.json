@@ -1,6 +1,25 @@
 {
   "products": [
     {
+      "id": "1778226176243",
+      "brand": "Yohji Yamamoto",
+      "name": "Y’s Yohji Yamamoto Blazer Jacket",
+      "desc": "• 세컨핸드 특성상 교환 및 환불은 어렵습니다\n• 측정 방식에 따라 사이즈 오차가 발생할 수 있습니다.\n• 모든 사진의 저작권은 103 SELECTED에 귀속됩니다.\n• 쇼룸 오픈 일정 및 기타 콘텐츠는 인스타그램(@103selected)에서 확인 가능합니다.",
+      "size": "S",
+      "sizeDesc": "Shoulder: 45cm\nChest: 54cm\nSleeve: 58cm\nLength: 73cm",
+      "category": "OUTER",
+      "price": "₩79,000",
+      "discount": "",
+      "buyLink": "https://fruitsfamily.com/product/4q41a/y-s-yohji-yamamoto-blazer-jacket Y’s Yohji Yamamoto Blazer Jacket on FruitsFamily",
+      "newDays": "",
+      "status": "available",
+      "images": [
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778226170649_R0006186.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778226173697_R0006187.jpg"
+      ],
+      "createdAt": 1778226176244
+    },
+    {
       "id": "1778225949105",
       "brand": "Jil Sander",
       "name": "00s Rain Mac Coat",
