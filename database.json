@@ -1,6 +1,26 @@
 {
   "products": [
     {
+      "id": "1778226343464",
+      "brand": "Helmut Lang",
+      "name": "1998 Raw Denim Jacket",
+      "desc": "• 세컨핸드 특성상 교환 및 환불은 어렵습니다\n• 측정 방식에 따라 사이즈 오차가 발생할 수 있습니다.\n• 모든 사진의 저작권은 103 SELECTED에 귀속됩니다.\n• 쇼룸 오픈 일정 및 기타 콘텐츠는 인스타그램(@103selected)에서 확인 가능합니다.",
+      "size": "38",
+      "sizeDesc": "Shoulder: 38cm\nChest: 47cm\nSleeve: 61cm\nLength: 54cm",
+      "category": "OUTER",
+      "price": "₩239,000",
+      "discount": "",
+      "buyLink": "https://fruitsfamily.com/product/55rsl/helmut-lang-1998-raw-denim-jacket Helmut Lang 1998 Raw Denim Jacket on FruitsFamily",
+      "newDays": "",
+      "status": "available",
+      "images": [
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778226332469_R0006178.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778226335505_R0006179.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778226339385_R0006176.jpg"
+      ],
+      "createdAt": 1778226343465
+    },
+    {
       "id": "1778226176243",
       "brand": "Yohji Yamamoto",
       "name": "Y’s Yohji Yamamoto Blazer Jacket",
