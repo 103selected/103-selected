@@ -1,6 +1,26 @@
 {
   "products": [
     {
+      "id": "1778225949105",
+      "brand": "Jil sander",
+      "name": "00s Rain Mac Coat",
+      "desc": "• 세컨핸드 특성상 교환 및 환불은 어렵습니다\n• 측정 방식에 따라 사이즈 오차가 발생할 수 있습니다.\n• 모든 사진의 저작권은 103 SELECTED에 귀속됩니다.\n• 쇼룸 오픈 일정 및 기타 콘텐츠는 인스타그램(@103selected)에서 확인 가능합니다.",
+      "size": "44",
+      "sizeDesc": "Shoulder: 43cm\nChest: 45cm\nSleeve: 60cm\nLength: 87cm",
+      "category": "OUTER",
+      "price": "₩259,000",
+      "discount": "",
+      "buyLink": "https://fruitsfamily.com/product/4q41v/jil-sander-00s-rain-mac-coat Jil sander 00s Rain Mac Coat on FruitsFamily",
+      "newDays": "",
+      "status": "available",
+      "images": [
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778225940267_R0006190.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778225943549_R0006191.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778225946502_R0006192.jpg"
+      ],
+      "createdAt": 1778225949105
+    },
+    {
       "id": "1778225708519",
       "brand": "Helmut Lang",
       "name": "2 Pocket Jacket",
