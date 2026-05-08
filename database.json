@@ -1,6 +1,26 @@
 {
   "products": [
     {
+      "id": "1778227266604",
+      "brand": "Comme des Garçons Shirt",
+      "name": "Wool Coat",
+      "desc": "• 세컨핸드 특성상 교환 및 환불은 어렵습니다\n• 측정 방식에 따라 사이즈 오차가 발생할 수 있습니다.\n• 모든 사진의 저작권은 103 SELECTED에 귀속됩니다.\n• 쇼룸 오픈 일정 및 기타 콘텐츠는 인스타그램(@103selected)에서 확인 가능합니다.",
+      "size": "S",
+      "sizeDesc": "Shoulder: 44\nChest: 54\nSleeve: 63\nLength: 65\n",
+      "category": "OUTER",
+      "price": "₩289,000",
+      "discount": "",
+      "buyLink": "https://fruitsfamily.com/product/4tzdv/comme-des-garcons-shirt-wool-coat",
+      "newDays": "",
+      "status": "available",
+      "images": [
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778227256820_R0006144.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778227260137_R0006146.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778227262938_R0006145.jpg"
+      ],
+      "createdAt": 1778227266604
+    },
+    {
       "id": "1778227117305",
       "brand": "Comme des Garçons BLACK",
       "name": "21FW '7' Coat",
