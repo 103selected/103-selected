@@ -1,6 +1,26 @@
 {
   "products": [
     {
+      "id": "1778228531774",
+      "brand": "Helmut Lang",
+      "name": "Virgin Wool Neck Coat",
+      "desc": "• 세컨핸드 특성상 교환 및 환불은 어렵습니다\n• 측정 방식에 따라 사이즈 오차가 발생할 수 있습니다.\n• 모든 사진의 저작권은 103 SELECTED에 귀속됩니다.\n• 쇼룸 오픈 일정 및 기타 콘텐츠는 인스타그램(@103selected)에서 확인 가능합니다.",
+      "size": "S",
+      "sizeDesc": "Shoulder: 41cm\nChest: 44cm\nSleeve: 54cm\nLength: 73cm",
+      "category": "OUTER",
+      "price": "₩289,000",
+      "discount": "",
+      "buyLink": "https://fruitsfamily.com/product/4rhek/helmut-lang-virgin-wool-neck-coat",
+      "newDays": "",
+      "status": "available",
+      "images": [
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778228522939_R0006139.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778228526052_R0006138.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778228529201_R0006141.jpg"
+      ],
+      "createdAt": 1778228531774
+    },
+    {
       "id": "1778228323987",
       "brand": "Helmut Lang",
       "name": "Double Coat",
