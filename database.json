@@ -1,6 +1,26 @@
 {
   "products": [
     {
+      "id": "1778227117305",
+      "brand": "Comme des Garçons BLACK",
+      "name": "21FW '7' Coat",
+      "desc": "• 세컨핸드 특성상 교환 및 환불은 어렵습니다\n• 측정 방식에 따라 사이즈 오차가 발생할 수 있습니다.\n• 모든 사진의 저작권은 103 SELECTED에 귀속됩니다.\n• 쇼룸 오픈 일정 및 기타 콘텐츠는 인스타그램(@103selected)에서 확인 가능합니다.",
+      "size": "L",
+      "sizeDesc": "Shoulder: 44cm\nChest: 48cm\nSleeve: 68cm\nLength: 93cm\n",
+      "category": "OUTER",
+      "price": "₩489,000",
+      "discount": "",
+      "buyLink": "https://fruitsfamily.com/product/4q4ms/black-comme-des-garcons-21fw-7-coat",
+      "newDays": "",
+      "status": "available",
+      "images": [
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778227107765_R0006151.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778227110938_R0006153.jpg",
+        "https://raw.githubusercontent.com/103selected/103-selected/main/images/1778227114344_R0006152.jpg"
+      ],
+      "createdAt": 1778227117305
+    },
+    {
       "id": "1778227015080",
       "brand": "Jil Sander",
       "name": "1999 F/W Light jacket",
