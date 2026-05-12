@@ -93,13 +93,13 @@
         .mail-text { font-weight: normal; border-bottom: none !important; cursor: default; }
 
         /* =======================================================
-           ★ 팝업 모달 : 투명도 조정으로 주변이 반투명하게 보이도록 복구 ★
+           ★ 팝업 모달 & 갤러리 스크롤바 디자인 적용 ★
            ======================================================= */
         
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background-color: rgba(255, 255, 255, 0.85); /* ★ 0.98에서 0.85로 낮춰서 은은하게 비치도록 수정 ★ */
-            backdrop-filter: blur(10px); /* 텍스트 가독성을 위해 살짝 블러 처리 */
+            background-color: rgba(255, 255, 255, 0.85); /* 은은한 화이트 반투명 유지 */
+            backdrop-filter: blur(10px); 
             display: flex; justify-content: center; align-items: flex-start; 
             opacity: 0; pointer-events: none; transition: all 0.4s ease; z-index: 200; 
             overflow-y: auto; 
@@ -124,11 +124,18 @@
         }
         .btn-close-modal:hover { opacity: 0.4; }
         
+        /* ★ 갤러리 (가로 스크롤 가능하게 수정 및 디자인 적용) ★ */
         .modal-gallery { 
-            display: flex; gap: 20px; width: 100%; overflow-x: auto; scrollbar-width: none; 
+            display: flex; gap: 20px; width: 100%; overflow-x: auto; 
             align-items: center; margin-bottom: 4vh; flex-shrink: 0;
+            padding-bottom: 15px; /* 스크롤바가 사진을 가리지 않게 여백 추가 */
         }
-        .modal-gallery::-webkit-scrollbar { display: none; }
+        
+        /* 스크롤바 예쁘게 커스텀 */
+        .modal-gallery::-webkit-scrollbar { height: 8px; } /* 스크롤바 두께 */
+        .modal-gallery::-webkit-scrollbar-track { background: #f4f4f4; border-radius: 10px; } /* 스크롤바 길(배경) */
+        .modal-gallery::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; } /* 실제 스크롤 손잡이 */
+        .modal-gallery::-webkit-scrollbar-thumb:hover { background: #bbb; } /* 마우스 올렸을 때 색상 */
         
         .modal-image { 
             height: 55vh; 
@@ -186,6 +193,9 @@
             .contact-list { font-size: 4.5vw; gap: 3vh; } 
             
             .modal-content { width: 90vw; padding-top: 5vh; }
+            .modal-gallery { padding-bottom: 10px; gap: 3vw; }
+            /* 모바일 스크롤바는 더 얇게 */
+            .modal-gallery::-webkit-scrollbar { height: 4px; }
             .modal-image { height: 45vh; } 
             .modal-info { font-size: 3.5vw; line-height: 1.6; } 
             .buy-btn-container { margin-top: 4vh; }
@@ -195,6 +205,7 @@
 </head>
 <body>
 
+    <!-- 헤더 / 로고 / 메뉴 -->
     <div class="top-left-logo" id="btn-home">103 SELECTED</div>
     <div class="top-right-nav">
         <div class="nav-item" onclick="openPage('shop')">SHOP</div>
@@ -208,6 +219,7 @@
         <div class="menu-item" onclick="openPage('contact')">CONTACT</div>
     </div>
 
+    <!-- SHOP 페이지 -->
     <div class="page-content" id="page-shop">
         <div class="content-wrapper">
             <div id="view-shop-main" class="center-view active">
@@ -237,6 +249,7 @@
         </div>
     </div>
 
+    <!-- ARCHIVE 페이지 -->
     <div class="page-content" id="page-archive">
         <div class="content-wrapper">
             <div id="view-archive-main" class="center-view active">
@@ -261,15 +274,15 @@
         </div>
     </div>
 
+    <!-- CONTACT 페이지 -->
     <div class="page-content" id="page-contact">
         <div class="contact-list" id="contact-container"><div>Mail: 불러오는 중...</div></div>
     </div>
 
+    <!-- 팝업 모달창 -->
     <div class="modal-overlay" id="modal-overlay">
-        
         <div class="modal-content">
             <div class="btn-close-modal" id="btn-close-modal">CLOSE</div>
-            
             <div class="modal-gallery" id="modal-gallery"></div>
             
             <div class="modal-info-container">
@@ -277,9 +290,9 @@
                 <div class="buy-btn-container" id="buy-btn-container"></div>
             </div>
         </div>
-        
     </div>
 
+    <!-- 사진 전체화면 확대(Zoom) 오버레이 -->
     <div class="zoom-overlay" id="zoom-overlay" onclick="closeZoom()">
         <img id="zoom-image" src="" alt="Zoomed Image">
     </div>
@@ -438,13 +451,10 @@
             let mediaHtml = '';
             let currentImageGroup = [];
 
-            // ★ 아카이브 사진에 확대(Zoom) 액션 완벽 적용 ★
             function flushImages() {
                 if (currentImageGroup.length > 0) {
                     mediaHtml += `<div style="column-count: 2; column-gap: 4vw; margin-bottom: 8vh; width: 100%;">`;
-                    currentImageGroup.forEach(img => { 
-                        mediaHtml += `<img src="${img}" style="width: 100%; display: block; margin-bottom: 4vw; background: transparent; cursor: zoom-in;" onclick="openZoom('${img}')">`; 
-                    });
+                    currentImageGroup.forEach(img => { mediaHtml += `<img src="${img}" style="width: 100%; display: block; margin-bottom: 4vw; background: transparent; cursor: zoom-in;" onclick="openZoom('${img}')">`; });
                     mediaHtml += `</div>`;
                     currentImageGroup = [];
                 }
@@ -542,7 +552,6 @@
             else if (item.status === "coming") btnContainer.innerHTML = `<span class="buy-btn disable-btn">Coming Soon</span>`;
             else btnContainer.innerHTML = `<a href="${item.buyLink || '#'}" target="_blank" class="buy-btn">Buy</a>`; 
 
-            // 모달창 열 때 스크롤 맨 위로 초기화
             document.getElementById('modal-overlay').scrollTop = 0;
             body.classList.add('modal-open');
         }
